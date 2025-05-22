@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
-
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:kids_learning/widget/image.dart';
@@ -26,7 +25,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   Future<void> _pickImage() async {
     final pickedFile = await _picker.pickImage(source: ImageSource.gallery);
-
     if (pickedFile != null) {
       image = File(pickedFile.path);
       final bytes = await image!.readAsBytes();
@@ -96,11 +94,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         topRight: Radius.circular(40))),
                 child: Column(
                   children: [
-                    const SizedBox(height: 15),
-                    // Text("It's My Profile",
-                    //     style: CustomTextStyle.semibold
-                    //         .copyWith(color: AppColors.black, fontSize: 27)),
-                    const SizedBox(height: 20),
+                    const SizedBox(height: 35),
                     displayPicture(),
                     const SizedBox(height: 20),
                     InkWell(
