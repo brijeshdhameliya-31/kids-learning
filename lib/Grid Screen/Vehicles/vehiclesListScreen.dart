@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:kids_learning/Grid%20Screen/Vehicles/vehiclesModel.dart';
 import 'package:kids_learning/Grid%20Screen/Vehicles/vehiclesVM.dart';
@@ -15,8 +14,26 @@ class VehicleListScreen extends StatefulWidget {
   State<VehicleListScreen> createState() => _VehicleListScreenState();
 }
 
-class _VehicleListScreenState extends State<VehicleListScreen> {
- VehicleVM viewModel = VehicleVM();
+class _VehicleListScreenState extends State<VehicleListScreen>
+    with TickerProviderStateMixin {
+  VehicleVM viewModel = VehicleVM();
+  late AnimationController controller;
+
+  @override
+  void initState() {
+    super.initState();
+    controller = AnimationController(
+      duration: const Duration(seconds: 1),
+      vsync: this,
+    )..forward();
+  }
+
+  @override
+  void dispose() {
+    controller.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider<VehicleVM>(
@@ -49,20 +66,26 @@ class _VehicleListScreenState extends State<VehicleListScreen> {
                       ),
                     ),
                     Expanded(
-                      child: Padding(
+                      child: GridView.builder(
                         padding:
                             const EdgeInsets.only(left: 30, right: 30, top: 30),
-                        child: GridView.builder(
-                          gridDelegate:
-                              const SliverGridDelegateWithFixedCrossAxisCount(
-                                  crossAxisCount: 2,
-                                  mainAxisSpacing: 30,
-                                  crossAxisSpacing: 30),
-                          itemCount: viewModel.vehicleList.length,
-                          itemBuilder: (context, index) {
-                            return listGrid(viewModel.vehicleList[index], index);
-                          },
-                        ),
+                        gridDelegate:
+                            const SliverGridDelegateWithFixedCrossAxisCount(
+                                crossAxisCount: 2,
+                                mainAxisSpacing: 30,
+                                crossAxisSpacing: 30),
+                        itemCount: viewModel.vehicleList.length,
+                        itemBuilder: (context, index) {
+                          final animation = Tween(begin: 0.0, end: 1.0).animate(
+                              CurvedAnimation(
+                                  parent: controller,
+                                  curve: Interval(0.1 * index, 0.9,
+                                      curve: Curves.easeInOut)));
+                          return ScaleTransition(
+                              scale: animation,
+                              child: listGrid(
+                                  viewModel.vehicleList[index], index));
+                        },
                       ),
                     ),
                   ],
@@ -95,7 +118,13 @@ class _VehicleListScreenState extends State<VehicleListScreen> {
       child: Container(
         decoration: BoxDecoration(
             color: Colors.lightBlue.shade50,
-            border: Border.all(width: 0.9, color: Colors.blue),
+            boxShadow: const [
+              BoxShadow(
+                  color: AppColors.skyBlue,
+                  blurRadius: 15,
+                  offset: Offset(0, 5))
+            ],
+            // border: Border.all(width: 0.9, color: Colors.blue),
             borderRadius: BorderRadius.circular(15)),
         child: Padding(
             padding: const EdgeInsets.all(5.0),

@@ -14,8 +14,26 @@ class FurnitureListScreen extends StatefulWidget {
   State<FurnitureListScreen> createState() => _FurnitureListScreenState();
 }
 
-class _FurnitureListScreenState extends State<FurnitureListScreen> {
+class _FurnitureListScreenState extends State<FurnitureListScreen>
+    with TickerProviderStateMixin {
   FurnitureVM viewModel = FurnitureVM();
+  late AnimationController controller;
+
+  @override
+  void initState() {
+    super.initState();
+    controller = AnimationController(
+      duration: const Duration(seconds: 1),
+      vsync: this,
+    )..forward();
+  }
+
+  @override
+  void dispose() {
+    controller.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider<FurnitureVM>(
@@ -48,20 +66,26 @@ class _FurnitureListScreenState extends State<FurnitureListScreen> {
                       ),
                     ),
                     Expanded(
-                      child: Padding(
+                      child: GridView.builder(
                         padding:
                             const EdgeInsets.only(left: 30, right: 30, top: 30),
-                        child: GridView.builder(
-                          gridDelegate:
-                              const SliverGridDelegateWithFixedCrossAxisCount(
-                                  crossAxisCount: 2,
-                                  mainAxisSpacing: 30,
-                                  crossAxisSpacing: 30),
-                          itemCount: viewModel.furnitureList.length,
-                          itemBuilder: (context, index) {
-                            return listGrid(viewModel.furnitureList[index], index);
-                          },
-                        ),
+                        gridDelegate:
+                            const SliverGridDelegateWithFixedCrossAxisCount(
+                                crossAxisCount: 2,
+                                mainAxisSpacing: 30,
+                                crossAxisSpacing: 30),
+                        itemCount: viewModel.furnitureList.length,
+                        itemBuilder: (context, index) {
+                          final animation = Tween(begin: 0.0, end: 1.0).animate(
+                              CurvedAnimation(
+                                  parent: controller,
+                                  curve: Interval(0.1 * index, 0.9,
+                                      curve: Curves.easeInOut)));
+                          return ScaleTransition(
+                              scale: animation,
+                              child: listGrid(
+                                  viewModel.furnitureList[index], index));
+                        },
                       ),
                     ),
                   ],
@@ -94,7 +118,13 @@ class _FurnitureListScreenState extends State<FurnitureListScreen> {
       child: Container(
         decoration: BoxDecoration(
             color: Colors.lightBlue.shade50,
-            border: Border.all(width: 0.9, color: Colors.blue),
+            boxShadow: const [
+              BoxShadow(
+                  color: AppColors.skyBlue,
+                  blurRadius: 15,
+                  offset: Offset(0, 5))
+            ],
+            // border: Border.all(width: 0.9, color: Colors.blue),
             borderRadius: BorderRadius.circular(15)),
         child: Padding(
             padding: const EdgeInsets.all(5.0),

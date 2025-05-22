@@ -11,11 +11,30 @@ class AquaticAnimalListScreen extends StatefulWidget {
   const AquaticAnimalListScreen({super.key});
 
   @override
-  State<AquaticAnimalListScreen> createState() => _AquaticAnimalListScreenState();
+  State<AquaticAnimalListScreen> createState() =>
+      _AquaticAnimalListScreenState();
 }
 
-class _AquaticAnimalListScreenState extends State<AquaticAnimalListScreen> {
- AquaticAnimalVM viewModel = AquaticAnimalVM();
+class _AquaticAnimalListScreenState extends State<AquaticAnimalListScreen>
+    with TickerProviderStateMixin {
+  AquaticAnimalVM viewModel = AquaticAnimalVM();
+  late AnimationController controller;
+
+  @override
+  void initState() {
+    super.initState();
+    controller = AnimationController(
+      duration: const Duration(seconds: 1),
+      vsync: this,
+    )..forward();
+  }
+
+  @override
+  void dispose() {
+    controller.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider<AquaticAnimalVM>(
@@ -48,20 +67,26 @@ class _AquaticAnimalListScreenState extends State<AquaticAnimalListScreen> {
                       ),
                     ),
                     Expanded(
-                      child: Padding(
+                      child: GridView.builder(
                         padding:
                             const EdgeInsets.only(left: 30, right: 30, top: 30),
-                        child: GridView.builder(
-                          gridDelegate:
-                              const SliverGridDelegateWithFixedCrossAxisCount(
-                                  crossAxisCount: 2,
-                                  mainAxisSpacing: 30,
-                                  crossAxisSpacing: 30),
-                          itemCount: viewModel.animalList.length,
-                          itemBuilder: (context, index) {
-                            return listGrid(viewModel.animalList[index], index);
-                          },
-                        ),
+                        gridDelegate:
+                            const SliverGridDelegateWithFixedCrossAxisCount(
+                                crossAxisCount: 2,
+                                mainAxisSpacing: 30,
+                                crossAxisSpacing: 30),
+                        itemCount: viewModel.animalList.length,
+                        itemBuilder: (context, index) {
+                          final animation = Tween(begin: 0.0, end: 1.0).animate(
+                              CurvedAnimation(
+                                  parent: controller,
+                                  curve: Interval(0.1 * index, 0.9,
+                                      curve: Curves.easeInOut)));
+                          return ScaleTransition(
+                              scale: animation,
+                              child:
+                                  listGrid(viewModel.animalList[index], index));
+                        },
                       ),
                     ),
                   ],
@@ -88,13 +113,21 @@ class _AquaticAnimalListScreenState extends State<AquaticAnimalListScreen> {
   Widget listGrid(AquaticAnimalModel model, int index) {
     return InkWell(
       onTap: () {
-        Navigator.push(context,
-            MaterialPageRoute(builder: (context) => AquaticAnimalScreen(index)));
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => AquaticAnimalScreen(index)));
       },
       child: Container(
         decoration: BoxDecoration(
             color: Colors.lightBlue.shade50,
-            border: Border.all(width: 0.9, color: Colors.blue),
+            // border: Border.all(width: 0.9, color: Colors.blue),
+            boxShadow: const [
+              BoxShadow(
+                  color: AppColors.skyBlue,
+                  blurRadius: 15,
+                  offset: Offset(0, 5))
+            ],
             borderRadius: BorderRadius.circular(15)),
         child: Padding(
             padding: const EdgeInsets.all(5.0),

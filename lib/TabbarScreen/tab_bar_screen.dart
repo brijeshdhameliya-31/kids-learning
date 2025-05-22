@@ -3,6 +3,7 @@ import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:kids_learning/Home%20Screen/home_screen.dart';
 import 'package:kids_learning/Listen%20And%20Guess/listenandGuess.dart';
+import 'package:kids_learning/Musics/music_screen.dart';
 import 'package:kids_learning/Setting/setting_screen.dart';
 import 'package:kids_learning/widget/colors.dart';
 import 'package:kids_learning/widget/image.dart';
@@ -20,6 +21,7 @@ class _TabBarScreenState extends State<TabBarScreen> {
   final pages = [
     const HomeScreen(),
     const ListenAndGuessScreen(),
+    const MusicScreen(),
     const SettingScreen()
   ];
 
@@ -32,10 +34,13 @@ class _TabBarScreenState extends State<TabBarScreen> {
           color: Colors.blue.shade200,
           buttonBackgroundColor: Colors.blue.shade400,
           height: 60,
-          items:  <Widget>[
-            Center(child: Image.asset(Images.HomeIcn,width: 30)),
-            Center(child: Image.asset(Images.ListenIcn,width: 30)),
-            Center(child: Image.asset(Images.SettingsIcn,width: 30)),
+          items: <Widget>[
+            Center(child: Image.asset(Images.HomeIcn, width: 30)),
+            Center(
+                child:
+                    Image.asset("assets/images/homeIcon/guess.png", width: 30)),
+            Center(child: Image.asset(Images.ListenIcn, width: 30)),
+            Center(child: Image.asset(Images.SettingsIcn, width: 30)),
           ],
           animationDuration: const Duration(milliseconds: 300),
           animationCurve: Curves.easeInOut,
@@ -44,41 +49,7 @@ class _TabBarScreenState extends State<TabBarScreen> {
               _selectedIndex = index;
             });
           },
-        )
-        // Container(
-        //   height: Platform.isAndroid
-        //       ? 64
-        //       : safePadding == 0
-        //           ? 64
-        //           : 88,
-        //   decoration:  BoxDecoration(
-        //     gradient:
-        //         LinearGradient(colors: [AppColors.skyBlue.withOpacity(0.4), AppColors.skyBlue.withOpacity(0.4)]),
-        //     // color: AppColor.white, //Theme.of(context).primaryColor,
-        //     borderRadius: const BorderRadius.only(
-        //       topLeft: Radius.circular(20),
-        //       topRight: Radius.circular(20)
-        //     ),
-        //     border: Border.all(width: 0.5,color: AppColors.skyBlue),
-        //     boxShadow: const <BoxShadow>[
-        //       BoxShadow(
-        //         color: AppColors.border,
-        //         blurRadius: 10,
-        //         spreadRadius: 5,
-        //       ),
-        //     ],
-        //   ),
-        //   child: Center(
-        //     child: Row(
-        //       children: [
-        //         tabbarItem(0, 'Learning', Images.HomeIcn),
-        //         tabbarItem(1, 'Listen & Guess', Images.ListenIcn),
-        //       tabbarItem(2, 'Setting', Images.SettingsIcn),
-        //       ],
-        //     ),
-        //   ),
-        // ),
-        );
+        ));
   }
 
   Widget tabbarItem(int index, String title, String image) {
@@ -114,10 +85,7 @@ class _TabBarScreenState extends State<TabBarScreen> {
                       ? Container(height: 17)
                       : Stack(
                           children: [
-                            Center(
-                              child: Image.asset(
-                                image,
-                                height: 30))
+                            Center(child: Image.asset(image, height: 30))
                           ],
                         ),
                   Padding(

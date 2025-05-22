@@ -43,6 +43,9 @@ dependencies:
   flutter_switch: ^0.3.2
   curved_navigation_bar: ^1.0.6
   fluttertoast: ^8.2.8
+  shared_preferences: ^2.5.3
+  just_audio: ^0.10.3
+  image_picker: ^1.1.2
 
 
 dev_dependencies:
@@ -71,6 +74,7 @@ flutter:
   assets:
     - assets/images/homeIcon/
     - assets/images/
+    - assets/music/
     - assets/images/alphabets/
     - assets/images/numbers/
     - assets/images/shape/
@@ -86,6 +90,7 @@ flutter:
     - assets/images/furnitures/
     - assets/images/flowers/
     - assets/images/seasons/
+    - assets/images/pageview/
 
 
   #   - images/a_dot_ham.jpeg

@@ -33,14 +33,8 @@ class _AlphabetScreenState extends State<AlphabetScreen> {
   @override
   Widget build(BuildContext context) {
     Future speak() async {
-      // print(await flutterTts.getLanguages);
-      // await flutterTts.setLanguage("en-IN");
-      // await flutterTts.setPitch(1.0);
-      // await flutterTts.setVolume(1.0);
       await flutterTts.setSpeechRate(0.2);
-      // print(await flutterTts.getVoices);
       int count = widget.selectedIndex;
-
       volume == true
           ? await flutterTts.speak(viewModel.alphabetList[count].alphabet!)
           : await flutterTts

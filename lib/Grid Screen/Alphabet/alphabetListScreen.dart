@@ -13,21 +13,31 @@ class AlphabetListScreen extends StatefulWidget {
   State<AlphabetListScreen> createState() => _AlphabetListScreenState();
 }
 
-class _AlphabetListScreenState extends State<AlphabetListScreen> {
+class _AlphabetListScreenState extends State<AlphabetListScreen>
+    with TickerProviderStateMixin {
   AlphabetVM viewModel = AlphabetVM();
+  late AnimationController controller;
+
+  @override
+  void initState() {
+    super.initState();
+    controller = AnimationController(
+      duration: const Duration(seconds: 1),
+      vsync: this,
+    )..forward();
+  }
+
+  @override
+  void dispose() {
+    controller.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      extendBodyBehindAppBar: true, backgroundColor: Colors.white,
-      // appBar: AppBar(forceMaterialTransparency: true,
-      //   centerTitle: true,
-      //   elevation: 0,
-      //   title: Text(
-      //     "Alphabets",
-      //     style: CustomTextStyle.bold
-      //         .copyWith(color: AppColors.black, fontSize: 22),
-      //   ),
-      // ),
+      backgroundColor: AppColors.skyBlue.withOpacity(0.99),
+      extendBodyBehindAppBar: true,
       body: SafeArea(
         child: Stack(
           children: [
@@ -55,20 +65,26 @@ class _AlphabetListScreenState extends State<AlphabetListScreen> {
                   ),
                 ),
                 Expanded(
-                  child: Padding(
-                    padding:
-                        const EdgeInsets.only(left: 30, right: 30, top: 30),
-                    child: GridView.builder(
-                      gridDelegate:
-                          const SliverGridDelegateWithFixedCrossAxisCount(
-                              crossAxisCount: 2,
-                              mainAxisSpacing: 30,
-                              crossAxisSpacing: 30),
-                      itemCount: viewModel.alphabetList.length,
-                      itemBuilder: (context, index) {
-                        return listGrid(viewModel.alphabetList[index], index);
-                      },
-                    ),
+                  child: GridView.builder(
+                    padding: const EdgeInsets.only(
+                        bottom: 30, left: 30, right: 30, top: 30),
+                    gridDelegate:
+                        const SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 2,
+                            mainAxisSpacing: 30,
+                            crossAxisSpacing: 30),
+                    itemCount: viewModel.alphabetList.length,
+                    itemBuilder: (context, index) {
+                      final animation = Tween(begin: 0.0, end: 1.0).animate(
+                          CurvedAnimation(
+                              parent: controller,
+                              curve: Interval(0.1 * index, 0.9,
+                                  curve: Curves.easeInOut)));
+                      return ScaleTransition(
+                          scale: animation,
+                          child:
+                              listGrid(viewModel.alphabetList[index], index));
+                    },
                   ),
                 ),
               ],
@@ -101,7 +117,13 @@ class _AlphabetListScreenState extends State<AlphabetListScreen> {
       child: Container(
         decoration: BoxDecoration(
             color: Colors.lightBlue.shade50,
-            border: Border.all(width: 0.9, color: Colors.blue),
+            boxShadow: const [
+              BoxShadow(
+                  color: AppColors.skyBlue,
+                  blurRadius: 15,
+                  offset: Offset(0, 5))
+            ],
+            // border: Border.all(width: 0.9, color: Colors.blue),
             borderRadius: BorderRadius.circular(15)),
         child: Padding(
           padding: const EdgeInsets.all(20.0),

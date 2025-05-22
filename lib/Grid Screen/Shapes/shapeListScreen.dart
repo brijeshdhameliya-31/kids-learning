@@ -14,8 +14,26 @@ class ShapeListScreen extends StatefulWidget {
   State<ShapeListScreen> createState() => _ShapeListScreenState();
 }
 
-class _ShapeListScreenState extends State<ShapeListScreen> {
+class _ShapeListScreenState extends State<ShapeListScreen>
+    with TickerProviderStateMixin {
   ShapeVM viewModel = ShapeVM();
+  late AnimationController controller;
+
+  @override
+  void initState() {
+    super.initState();
+    controller = AnimationController(
+      duration: const Duration(seconds: 1),
+      vsync: this,
+    )..forward();
+  }
+
+  @override
+  void dispose() {
+    controller.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider<ShapeVM>(
@@ -48,20 +66,27 @@ class _ShapeListScreenState extends State<ShapeListScreen> {
                       ),
                     ),
                     Expanded(
-                      child: Padding(
+                      child: GridView.builder(
                         padding:
                             const EdgeInsets.only(left: 30, right: 30, top: 30),
-                        child: GridView.builder(
-                          gridDelegate:
-                              const SliverGridDelegateWithFixedCrossAxisCount(
-                                  crossAxisCount: 2,
-                                  mainAxisSpacing: 30,
-                                  crossAxisSpacing: 30),
-                          itemCount: viewModel.allShapeList.length,
-                          itemBuilder: (context, index) {
-                            return listGrid(viewModel.allShapeList[index], index);
-                          },
-                        ),
+                        gridDelegate:
+                            const SliverGridDelegateWithFixedCrossAxisCount(
+                                crossAxisCount: 2,
+                                mainAxisSpacing: 30,
+                                crossAxisSpacing: 30),
+                        itemCount: viewModel.allShapeList.length,
+                        itemBuilder: (context, index) {
+                          final animation = Tween(begin: 0.0, end: 1.0).animate(
+                              CurvedAnimation(
+                                  parent: controller,
+                                  curve: Interval(0.1 * index, 0.9,
+                                      curve: Curves.easeInOut)));
+                          return ScaleTransition(
+                            scale: animation,
+                            child:
+                                listGrid(viewModel.allShapeList[index], index),
+                          );
+                        },
                       ),
                     ),
                   ],
@@ -88,13 +113,19 @@ class _ShapeListScreenState extends State<ShapeListScreen> {
   Widget listGrid(ShapeModel model, int index) {
     return InkWell(
       onTap: () {
-        Navigator.push(
-            context, MaterialPageRoute(builder: (context) => ShapeScreen(index)));
+        Navigator.push(context,
+            MaterialPageRoute(builder: (context) => ShapeScreen(index)));
       },
       child: Container(
         decoration: BoxDecoration(
             color: Colors.lightBlue.shade50,
-            border: Border.all(width: 0.9, color: Colors.blue),
+            boxShadow: const [
+              BoxShadow(
+                  color: AppColors.skyBlue,
+                  blurRadius: 15,
+                  offset: Offset(0, 5))
+            ],
+            // border: Border.all(width: 0.9, color: Colors.blue),
             borderRadius: BorderRadius.circular(15)),
         child: Padding(
             padding: const EdgeInsets.all(5.0),

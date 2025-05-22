@@ -1,11 +1,10 @@
-
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:kids_learning/Home%20Screen/home_screen.dart';
+import 'package:kids_learning/FormScreen/form_screen.dart';
 import 'package:kids_learning/TabbarScreen/tab_bar_screen.dart';
-import 'package:kids_learning/widget/colors.dart';
-import 'package:kids_learning/widget/textStyle.dart';
+import 'package:kids_learning/pageview/pageview_screen.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -15,54 +14,81 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
-
   @override
   void initState() {
-    Timer(const Duration(seconds: 3), () {
-    Navigator.pushAndRemoveUntil(
-     context,
-      MaterialPageRoute(
-      builder: (context) => const TabBarScreen(),
-    ),(route) => false,
-   );
-});
     super.initState();
+    screenManage();
   }
+
+  void screenManage() async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    bool isSkip = preferences.getBool('skipData') ?? false;
+    bool isForm = preferences.getBool('formData') ?? false;
+    print("Skip : $isSkip");
+    if (isSkip == false) {
+      Timer(const Duration(seconds: 3), () {
+        Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(
+            builder: (context) => const PageViewScreen(),
+          ),
+          (route) => false,
+        );
+      });
+    } else {
+      if (isForm == false) {
+        Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(
+            builder: (context) => const FormScreen(),
+          ),
+          (route) => false,
+        );
+      } else {
+        Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(
+            builder: (context) => const TabBarScreen(),
+          ),
+          (route) => false,
+        );
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
         width: MediaQuery.of(context).size.width,
-        height  : MediaQuery.of(context).size.height,
+        height: MediaQuery.of(context).size.height,
         decoration: BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            colors: [
-            Colors.blue.shade200,
-            Colors.white,
-            Colors.blue.shade200
-          ])
-        ),
+            gradient: LinearGradient(
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+                colors: [
+              Colors.blue.shade200,
+              Colors.white,
+              Colors.blue.shade200
+            ])),
         child: Align(
           alignment: Alignment.center,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Container(
-                width: 250,
-                height: 250,
-                decoration: const BoxDecoration(
-                  color: Colors.transparent
-                ),
-                child: Image.asset("assets/images/homeIcon/splashImage.png",width: 250)),
+                  width: 250,
+                  height: 250,
+                  decoration: const BoxDecoration(color: Colors.transparent),
+                  child: Image.asset("assets/images/homeIcon/splashImage.png",
+                      width: 250)),
               const SizedBox(height: 15),
-              Text("Kid's Learning...",
-              style:  CustomTextStyle.bold.copyWith(letterSpacing: 1.5,
-                fontSize: 32,
-                color: AppColors.black
-              )),
-              const SizedBox(height: 15),
+              // Text("Kid's Learning...",
+              //     style: CustomTextStyle.bold.copyWith(
+              //         letterSpacing: 1.5,
+              //         fontSize: 32,
+              //         color: AppColors.black)),
+              // const SizedBox(height: 15),
             ],
           ),
         ),

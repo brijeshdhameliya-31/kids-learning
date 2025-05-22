@@ -7,7 +7,7 @@ plugins {
 
 android {
     namespace = "com.example.kids_learning"
-    compileSdk = 34//flutter.compileSdkVersion
+    compileSdk = 35//flutter.compileSdkVersion
     ndkVersion = flutter.ndkVersion
 
     compileOptions {
