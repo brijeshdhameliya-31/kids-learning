@@ -6,7 +6,6 @@ import 'package:image_picker/image_picker.dart';
 import 'package:kids_learning/widget/image.dart';
 import 'package:kids_learning/widget/textStyle.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
 import '../widget/colors.dart';
 
 class ProfileScreen extends StatefulWidget {

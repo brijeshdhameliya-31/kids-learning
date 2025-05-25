@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:kids_learning/Ads/InterstitialAdManager.dart';
 import 'package:kids_learning/Profile%20Screen/profile_screen.dart';
 import 'package:kids_learning/pageview/pageview_screen.dart';
 import 'package:kids_learning/widget/colors.dart';
@@ -183,8 +184,10 @@ class _SettingScreenState extends State<SettingScreen> {
       padding: const EdgeInsets.symmetric(horizontal: 20),
       child: InkWell(
         onTap: () {
-          Navigator.push(context,
-              MaterialPageRoute(builder: (context) => ProfileScreen()));
+          InterstitialAdManager.shared.showAdAndNavigate(() {
+            Navigator.push(context,
+                MaterialPageRoute(builder: (context) => const ProfileScreen()));
+          });
         },
         child: Container(
           decoration: BoxDecoration(

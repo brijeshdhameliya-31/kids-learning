@@ -24,7 +24,12 @@ class _VegetableListScreenState extends State<VegetableListScreen>
     controller = AnimationController(
       duration: const Duration(seconds: 1),
       vsync: this,
-    )..forward();
+    );
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) {
+        controller.forward();
+      }
+    });
     viewModel.vegetableList
         .sort((a, b) => a.vegetableName!.compareTo(b.vegetableName!));
     super.initState();
@@ -32,6 +37,7 @@ class _VegetableListScreenState extends State<VegetableListScreen>
 
   @override
   void dispose() {
+    controller.stop();
     controller.dispose();
     super.dispose();
   }
@@ -78,10 +84,12 @@ class _VegetableListScreenState extends State<VegetableListScreen>
                                 crossAxisSpacing: 30),
                         itemCount: viewModel.vegetableList.length,
                         itemBuilder: (context, index) {
+                          final start = 0.1 * index;
+                          final end = (start + 0.5).clamp(0.0, 1.0);
                           final animation = Tween(begin: 0.0, end: 1.0).animate(
                               CurvedAnimation(
                                   parent: controller,
-                                  curve: Interval(0.1 * index, 0.9,
+                                  curve: Interval(start.clamp(0.0, 1.0), end,
                                       curve: Curves.easeInOut)));
                           return ScaleTransition(
                               scale: animation,

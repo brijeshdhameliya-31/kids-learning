@@ -2,11 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:kids_learning/models/base_viewmodel.dart';
 import 'package:kids_learning/widget/image.dart';
 
-enum ListenGuessType {
-  alphabet,
-  number,
-  color,
-}
+enum ListenGuessType { alphabet, number, color, count, missing }
 
 class ListenVM extends BaseVM {
   List<ListenGuessModel> allGrid = [
@@ -25,6 +21,16 @@ class ListenVM extends BaseVM {
         image: Images.colors,
         color: Colors.yellow.shade200,
         type: ListenGuessType.color),
+    ListenGuessModel(
+        name: "Count & Guess",
+        image: "assets/images/homeIcon/count_guess.jpg",
+        color: Colors.grey.shade200,
+        type: ListenGuessType.count),
+    ListenGuessModel(
+        name: "Fill in the blank",
+        image: "assets/images/homeIcon/count_guess.jpg",
+        color: Colors.grey.shade200,
+        type: ListenGuessType.missing)
   ];
 }
 

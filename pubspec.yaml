@@ -46,11 +46,19 @@ dependencies:
   shared_preferences: ^2.5.3
   just_audio: ^0.10.3
   image_picker: ^1.1.2
+  google_mobile_ads: any
 
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  flutter_launcher_icons: ^0.14.3
+
+flutter_launcher_icons :
+  android: true
+  ios: true
+  remove_alpha_ios: true
+  image_path: "assets/app_logo.png"
 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is
@@ -58,6 +66,7 @@ dev_dependencies:
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
   flutter_lints: ^4.0.0
+  build_runner: ^2.1.2
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
@@ -72,6 +81,7 @@ flutter:
 
   # To add assets to your application, add an assets section, like this:
   assets:
+    - assets/
     - assets/images/homeIcon/
     - assets/images/
     - assets/music/
@@ -91,6 +101,7 @@ flutter:
     - assets/images/flowers/
     - assets/images/seasons/
     - assets/images/pageview/
+    - assets/images/count/
 
 
   #   - images/a_dot_ham.jpeg

@@ -3,6 +3,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:kids_learning/Ads/InterstitialAdManager.dart';
 import 'package:kids_learning/Grid%20Screen/Alphabet/alphabetListScreen.dart';
 import 'package:kids_learning/Grid%20Screen/Animals/animalsListScreen.dart';
 import 'package:kids_learning/Grid%20Screen/AqauticAnimal/aquaticAnimalListScreen.dart';
@@ -44,74 +45,112 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
   onTap(HomeGridType type) {
     switch (type) {
       case HomeGridType.alphabet:
-        Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) => const AlphabetListScreen()));
+        InterstitialAdManager.shared.showAdAndNavigate(() {
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => const AlphabetListScreen()));
+        });
         break;
       case HomeGridType.numbers:
-        Navigator.push(context,
-            MaterialPageRoute(builder: (context) => const NumberListScreen()));
+        InterstitialAdManager.shared.showAdAndNavigate(() {
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => const NumberListScreen()));
+        });
         break;
       case HomeGridType.colors:
-        Navigator.push(context,
-            MaterialPageRoute(builder: (context) => const ColorListScreen()));
+        InterstitialAdManager.shared.showAdAndNavigate(() {
+          Navigator.push(context,
+              MaterialPageRoute(builder: (context) => const ColorListScreen()));
+        });
         break;
       case HomeGridType.shapes:
-        Navigator.push(context,
-            MaterialPageRoute(builder: (context) => const ShapeListScreen()));
+        InterstitialAdManager.shared.showAdAndNavigate(() {
+          Navigator.push(context,
+              MaterialPageRoute(builder: (context) => const ShapeListScreen()));
+        });
         break;
       case HomeGridType.birds:
-        Navigator.push(context,
-            MaterialPageRoute(builder: (context) => const BirdsListScreen()));
+        InterstitialAdManager.shared.showAdAndNavigate(() {
+          Navigator.push(context,
+              MaterialPageRoute(builder: (context) => const BirdsListScreen()));
+        });
         break;
       case HomeGridType.animals:
-        Navigator.push(context,
-            MaterialPageRoute(builder: (context) => const AnimalsListScreen()));
+        InterstitialAdManager.shared.showAdAndNavigate(() {
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => const AnimalsListScreen()));
+        });
         break;
       case HomeGridType.flowers:
-        Navigator.push(context,
-            MaterialPageRoute(builder: (context) => const FlowerListScreen()));
+        InterstitialAdManager.shared.showAdAndNavigate(() {
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => const FlowerListScreen()));
+        });
         break;
       case HomeGridType.fruits:
-        Navigator.push(context,
-            MaterialPageRoute(builder: (context) => const FruitsListScreen()));
+        InterstitialAdManager.shared.showAdAndNavigate(() {
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => const FruitsListScreen()));
+        });
         break;
       case HomeGridType.vegetables:
-        Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) => const VegetableListScreen()));
+        InterstitialAdManager.shared.showAdAndNavigate(() {
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => const VegetableListScreen()));
+        });
         break;
       case HomeGridType.vehicles:
-        Navigator.push(context,
-            MaterialPageRoute(builder: (context) => const VehicleListScreen()));
+        InterstitialAdManager.shared.showAdAndNavigate(() {
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => const VehicleListScreen()));
+        });
         break;
       case HomeGridType.bodyParts:
         break;
       case HomeGridType.kitchenUtensils:
-        Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) => const KitchenSetListScreen()));
+        InterstitialAdManager.shared.showAdAndNavigate(() {
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => const KitchenSetListScreen()));
+        });
         break;
       case HomeGridType.aquaticAnimal:
-        Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) => const AquaticAnimalListScreen()));
+        InterstitialAdManager.shared.showAdAndNavigate(() {
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => const AquaticAnimalListScreen()));
+        });
         break;
       case HomeGridType.occupation:
-        Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) => const OccupationListScreen()));
+        InterstitialAdManager.shared.showAdAndNavigate(() {
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => const OccupationListScreen()));
+        });
         break;
       case HomeGridType.furnitures:
-        Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) => const FurnitureListScreen()));
+        InterstitialAdManager.shared.showAdAndNavigate(() {
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => const FurnitureListScreen()));
+        });
         break;
       case HomeGridType.months:
         Navigator.push(context,

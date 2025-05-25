@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:kids_learning/Ads/InterstitialAdManager.dart';
 import 'package:kids_learning/Splash%20Screen/splash_screen.dart';
-import 'package:kids_learning/TabbarScreen/tab_bar_screen.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  MobileAds.instance.initialize();
+  InterstitialAdManager.shared.loadInterstitialAd();
   runApp(const MyApp());
 }
 

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:kids_learning/Listen%20And%20Guess/Alphabet%20Listen/alpabets_Listen_screen.dart';
 import 'package:kids_learning/Listen%20And%20Guess/Color%20Listen/color_listen_screen.dart';
+import 'package:kids_learning/Listen%20And%20Guess/Count%20and%20Guess/count_screen.dart';
+import 'package:kids_learning/Listen%20And%20Guess/Missing%20Fill%20Up/missing_screen.dart';
 import 'package:kids_learning/Listen%20And%20Guess/Number%20Listen/number_Listen_screen.dart';
 import 'package:kids_learning/Listen%20And%20Guess/listenVM.dart';
 import 'package:kids_learning/widget/colors.dart';
@@ -13,8 +15,10 @@ class ListenAndGuessScreen extends StatefulWidget {
   State<ListenAndGuessScreen> createState() => _ListenAndGuessScreenState();
 }
 
-class _ListenAndGuessScreenState extends State<ListenAndGuessScreen> {
+class _ListenAndGuessScreenState extends State<ListenAndGuessScreen>
+    with TickerProviderStateMixin {
   ListenVM viewModel = ListenVM();
+  late AnimationController _controller;
 
   onTap(ListenGuessType type) {
     switch (type) {
@@ -31,12 +35,34 @@ class _ListenAndGuessScreenState extends State<ListenAndGuessScreen> {
                 builder: (context) => const NumberListenScreen()));
         break;
       case ListenGuessType.color:
-        Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) => const ColorListenScreen()));
-         break;
+        Navigator.push(context,
+            MaterialPageRoute(builder: (context) => const ColorListenScreen()));
+        break;
+      case ListenGuessType.count:
+          Navigator.push(context,
+            MaterialPageRoute(builder: (context) => const CountScreen()));
+        break;
+      case ListenGuessType.missing:
+          Navigator.push(context,
+            MaterialPageRoute(builder: (context) => const MissingScreen()));
+        break;
     }
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _controller = AnimationController(
+      duration: const Duration(seconds: 1),
+      vsync: this,
+    )..forward();
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
   }
 
   @override
@@ -71,21 +97,26 @@ class _ListenAndGuessScreenState extends State<ListenAndGuessScreen> {
                         .copyWith(color: AppColors.black, fontSize: 27)),
                 const SizedBox(height: 20),
                 Expanded(
-                  child: Padding(
-                    padding: const EdgeInsets.only(left: 30, right: 30),
-                    child: GridView.builder(
-                      gridDelegate:
-                          const SliverGridDelegateWithFixedCrossAxisCount(
-                        childAspectRatio: 0.75,
-                        crossAxisCount: 2,
-                        mainAxisSpacing: 8,
-                        crossAxisSpacing: 30,
-                      ),
-                      itemCount: viewModel.allGrid.length,
-                      itemBuilder: (context, index) {
-                        return gridItem(viewModel.allGrid[index]);
-                      },
+                  child: GridView.builder(
+                     padding: const EdgeInsets.only(left: 30, right: 30,bottom: 30),
+                    gridDelegate:
+                        const SliverGridDelegateWithFixedCrossAxisCount(
+                      childAspectRatio: 0.75,
+                      crossAxisCount: 2,
+                      mainAxisSpacing: 8,
+                      crossAxisSpacing: 30,
                     ),
+                    itemCount: viewModel.allGrid.length,
+                    itemBuilder: (context, index) {
+                       final animation = Tween(begin: 0.0, end: 1.0)
+                              .animate(CurvedAnimation(
+                                  parent: _controller,
+                                  curve: Interval(0.1 * index, 0.9,
+                                      curve: Curves.easeInOut)));
+                      return ScaleTransition(
+                        scale: animation,
+                        child: gridItem(viewModel.allGrid[index]));
+                    },
                   ),
                 ),
               ],

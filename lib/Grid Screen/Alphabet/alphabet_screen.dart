@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_switch/flutter_switch.dart';
 import 'package:flutter_tts/flutter_tts.dart';
+import 'package:kids_learning/Ads/InterstitialAdManager.dart';
 import 'package:kids_learning/Grid%20Screen/Alphabet/alphabetVM.dart';
 import 'package:kids_learning/models/base_viewmodel.dart';
 import 'package:kids_learning/widget/colors.dart';
@@ -132,13 +133,33 @@ class _AlphabetScreenState extends State<AlphabetScreen> {
                                   child: Image.asset(Images.volume, width: 70)),
                               GestureDetector(
                                 onTap: () {
+                                  // if (widget.selectedIndex >= 0 &&
+                                  //     widget.selectedIndex < 25) {
+                                  //   print(widget.selectedIndex);
+                                  //   setState(() {
+                                  //     widget.selectedIndex++;
+                                  //   });
+                                  //   speak();
+                                  // }
                                   if (widget.selectedIndex >= 0 &&
                                       widget.selectedIndex < 25) {
-                                    print(widget.selectedIndex);
-                                    setState(() {
-                                      widget.selectedIndex++;
-                                    });
-                                    speak();
+                                    int nextIndex = widget.selectedIndex + 1;
+
+                                    // Check if nextIndex is divisible by 5 (but not 0)
+                                    if (nextIndex % 5 == 0 && nextIndex != 0) {
+                                      InterstitialAdManager.shared
+                                          .showAdAndNavigate(() {
+                                        setState(() {
+                                          widget.selectedIndex = nextIndex;
+                                        });
+                                        speak();
+                                      });
+                                    } else {
+                                      setState(() {
+                                        widget.selectedIndex = nextIndex;
+                                      });
+                                      speak();
+                                    }
                                   }
                                 },
                                 child:

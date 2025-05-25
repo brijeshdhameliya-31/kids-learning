@@ -26,7 +26,7 @@ class _SplashScreenState extends State<SplashScreen> {
     bool isForm = preferences.getBool('formData') ?? false;
     print("Skip : $isSkip");
     if (isSkip == false) {
-      Timer(const Duration(seconds: 3), () {
+      Timer(const Duration(seconds: 5), () {
         Navigator.pushAndRemoveUntil(
           context,
           MaterialPageRoute(
@@ -37,21 +37,25 @@ class _SplashScreenState extends State<SplashScreen> {
       });
     } else {
       if (isForm == false) {
-        Navigator.pushAndRemoveUntil(
-          context,
-          MaterialPageRoute(
-            builder: (context) => const FormScreen(),
-          ),
-          (route) => false,
-        );
+        Timer(const Duration(seconds: 5), () {
+          Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const FormScreen(),
+            ),
+            (route) => false,
+          );
+        });
       } else {
-        Navigator.pushAndRemoveUntil(
-          context,
-          MaterialPageRoute(
-            builder: (context) => const TabBarScreen(),
-          ),
-          (route) => false,
-        );
+        Timer(const Duration(seconds: 5), () {
+          Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const TabBarScreen(),
+            ),
+            (route) => false,
+          );
+        });
       }
     }
   }
@@ -77,11 +81,10 @@ class _SplashScreenState extends State<SplashScreen> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Container(
-                  width: 250,
-                  height: 250,
+                  width: 320,
+                  height: 320,
                   decoration: const BoxDecoration(color: Colors.transparent),
-                  child: Image.asset("assets/images/homeIcon/splashImage.png",
-                      width: 250)),
+                  child: Image.asset("assets/app_splash.png", width: 320)),
               const SizedBox(height: 15),
               // Text("Kid's Learning...",
               //     style: CustomTextStyle.bold.copyWith(

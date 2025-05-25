@@ -25,11 +25,17 @@ class _FlowerListScreenState extends State<FlowerListScreen>
     controller = AnimationController(
       duration: const Duration(seconds: 1),
       vsync: this,
-    )..forward();
+    );
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) {
+        controller.forward();
+      }
+    });
   }
 
   @override
   void dispose() {
+    controller.stop();
     controller.dispose();
     super.dispose();
   }
@@ -67,8 +73,8 @@ class _FlowerListScreenState extends State<FlowerListScreen>
                     ),
                     Expanded(
                       child: GridView.builder(
-                         padding:
-                          const EdgeInsets.only(left: 30, right: 30, top: 30),
+                        padding:
+                            const EdgeInsets.only(left: 30, right: 30, top: 30),
                         gridDelegate:
                             const SliverGridDelegateWithFixedCrossAxisCount(
                                 crossAxisCount: 2,
@@ -76,14 +82,17 @@ class _FlowerListScreenState extends State<FlowerListScreen>
                                 crossAxisSpacing: 30),
                         itemCount: viewModel.flowerList.length,
                         itemBuilder: (context, index) {
+                          final start = 0.1 * index;
+                          final end = (start + 0.5).clamp(0.0, 1.0);
                           final animation = Tween(begin: 0.0, end: 1.0).animate(
-                          CurvedAnimation(
-                              parent: controller,
-                              curve: Interval(0.1 * index, 0.9,
-                                  curve: Curves.easeInOut)));
+                              CurvedAnimation(
+                                  parent: controller,
+                                  curve: Interval(start.clamp(0.0, 1.0), end,
+                                      curve: Curves.easeInOut)));
                           return ScaleTransition(
-                            scale: animation,
-                            child: listGrid(viewModel.flowerList[index], index));
+                              scale: animation,
+                              child:
+                                  listGrid(viewModel.flowerList[index], index));
                         },
                       ),
                     ),
@@ -117,7 +126,7 @@ class _FlowerListScreenState extends State<FlowerListScreen>
       child: Container(
         decoration: BoxDecoration(
             color: Colors.lightBlue.shade50,
-             boxShadow: const [
+            boxShadow: const [
               BoxShadow(
                   color: AppColors.skyBlue,
                   blurRadius: 15,

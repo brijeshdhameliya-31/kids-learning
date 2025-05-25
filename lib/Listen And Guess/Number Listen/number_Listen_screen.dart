@@ -17,7 +17,7 @@ class NumberListenScreen extends StatefulWidget {
 class _NumberListenScreenState extends State<NumberListenScreen> {
   final FlutterTts flutterTts = FlutterTts();
   NumberListenVM viewModel = NumberListenVM();
-
+  late List<NumberListenModel> shuffledList;
   bool isPressed = false;
   Color istrue = Colors.green;
   Color isWrong = Colors.red;
@@ -27,7 +27,8 @@ class _NumberListenScreenState extends State<NumberListenScreen> {
 
   @override
   void initState() {
-    flutterTts.speak(viewModel.newList[newIndex ?? 0].numberName!);
+    shuffledList = List<NumberListenModel>.from(viewModel.newList)..shuffle();
+    flutterTts.speak(shuffledList[newIndex ?? 0].numberName!);
     super.initState();
   }
 
@@ -70,7 +71,7 @@ class _NumberListenScreenState extends State<NumberListenScreen> {
                       isPressed = false;
                     },
                     physics: const NeverScrollableScrollPhysics(),
-                    itemCount: viewModel.newList.length,
+                    itemCount: shuffledList.length,
                     itemBuilder: (context, index) {
                       newIndex = index;
                       return Column(
@@ -79,7 +80,7 @@ class _NumberListenScreenState extends State<NumberListenScreen> {
                           const SizedBox(height: 30.0),
                           GestureDetector(
                               onTap: () => flutterTts
-                                  .speak(viewModel.newList[index].numberName!),
+                                  .speak(shuffledList[index].numberName!),
                               child: Image.asset(Images.volume, width: 70)),
                           const SizedBox(height: 30.0),
                           GridView.count(
@@ -94,14 +95,15 @@ class _NumberListenScreenState extends State<NumberListenScreen> {
                               primary: false,
                               children: [
                                 for (int i = 0;
-                                    i < viewModel.newList[index].answer!.length;
+                                    i < shuffledList[index].answer!.length;
                                     i++)
                                   GestureDetector(
                                     onTap: isPressed
                                         ? () {}
                                         : () {
-                                            if (viewModel
-                                                .newList[index].answer!.entries
+                                            if (shuffledList[index]
+                                                .answer!
+                                                .entries
                                                 .toList()[i]
                                                 .value) {
                                               setState(() {
@@ -138,8 +140,9 @@ class _NumberListenScreenState extends State<NumberListenScreen> {
                                           border: Border.all(
                                               width: 5,
                                               color: isPressed
-                                                  ? viewModel.newList[index]
-                                                          .answer!.entries
+                                                  ? shuffledList[index]
+                                                          .answer!
+                                                          .entries
                                                           .toList()[i]
                                                           .value
                                                       ? Colors.green
@@ -158,7 +161,9 @@ class _NumberListenScreenState extends State<NumberListenScreen> {
                                       child: Padding(
                                         padding: const EdgeInsets.all(20.0),
                                         child: Image.asset(
-                                          viewModel.newList[index].answer!.keys
+                                          shuffledList[index]
+                                              .answer!
+                                              .keys
                                               .toList()[i],
                                           // height: 1,
                                           // width: 1,
@@ -172,7 +177,7 @@ class _NumberListenScreenState extends State<NumberListenScreen> {
                           const SizedBox(height: 30.0),
                           GestureDetector(
                               onTap: isPressed
-                                  ? index + 1 == viewModel.newList.length
+                                  ? index + 1 == shuffledList.length
                                       ? () {
                                           Navigator.push(
                                               context,
@@ -185,8 +190,9 @@ class _NumberListenScreenState extends State<NumberListenScreen> {
                                               duration: const Duration(
                                                   microseconds: 500),
                                               curve: Curves.linear);
-                                          flutterTts.speak(viewModel
-                                              .newList[index + 1].numberName!);
+                                          flutterTts.speak(
+                                              shuffledList[index + 1]
+                                                  .numberName!);
                                         }
                                   : null,
                               child: Image.asset(Images.rightArrow, width: 70)),
@@ -210,7 +216,7 @@ class _NumberListenScreenState extends State<NumberListenScreen> {
                     icon: Image.asset(Images.backArrow, width: 45)),
               ),
             ),
-          )
+          ),
         ],
       ),
     );

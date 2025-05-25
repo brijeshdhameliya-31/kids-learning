@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:kids_learning/Ads/InterstitialAdManager.dart';
 import 'package:kids_learning/Grid%20Screen/Alphabet/alphabetModel.dart';
 import 'package:kids_learning/Grid%20Screen/Alphabet/alphabetVM.dart';
 import 'package:kids_learning/Grid%20Screen/Alphabet/alphabet_screen.dart';
@@ -24,11 +25,18 @@ class _AlphabetListScreenState extends State<AlphabetListScreen>
     controller = AnimationController(
       duration: const Duration(seconds: 1),
       vsync: this,
-    )..forward();
+    );
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) {
+        controller.forward();
+      }
+    });
   }
 
   @override
   void dispose() {
+    controller.stop();
     controller.dispose();
     super.dispose();
   }
@@ -75,10 +83,12 @@ class _AlphabetListScreenState extends State<AlphabetListScreen>
                             crossAxisSpacing: 30),
                     itemCount: viewModel.alphabetList.length,
                     itemBuilder: (context, index) {
+                      final start = 0.1 * index;
+                      final end = (start + 0.5).clamp(0.0, 1.0);
                       final animation = Tween(begin: 0.0, end: 1.0).animate(
                           CurvedAnimation(
                               parent: controller,
-                              curve: Interval(0.1 * index, 0.9,
+                              curve: Interval(start.clamp(0.0, 1.0), end,
                                   curve: Curves.easeInOut)));
                       return ScaleTransition(
                           scale: animation,
