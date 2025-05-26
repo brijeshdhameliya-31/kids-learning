@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_tts/flutter_tts.dart';
+import 'package:kids_learning/Ads/bannerAdsManager.dart';
 import 'package:kids_learning/Grid%20Screen/Animals/animalsVM.dart';
 import 'package:kids_learning/widget/colors.dart';
 import 'package:kids_learning/widget/image.dart';
@@ -90,25 +91,12 @@ class _AnimalsScreenState extends State<AnimalsScreen> {
                       children: [
                         InkWell(
                             onTap: () {
-                              if (widget.selectedIndex >= 0 &&
-                                  widget.selectedIndex < 25) {
-                                int nextIndex = widget.selectedIndex + 1;
-
-                                // Check if nextIndex is divisible by 5 (but not 0)
-                                if (nextIndex % 5 == 0 && nextIndex != 0) {
-                                  InterstitialAdManager.shared
-                                      .showAdAndNavigate(() {
-                                    setState(() {
-                                      widget.selectedIndex = nextIndex;
-                                    });
-                                    speak();
-                                  });
-                                } else {
-                                  setState(() {
-                                    widget.selectedIndex = nextIndex;
-                                  });
-                                  speak();
-                                }
+                              if (widget.selectedIndex > 0 &&
+                                  widget.selectedIndex <= 25) {
+                                setState(() {
+                                  widget.selectedIndex--;
+                                });
+                                speak();
                               }
                             },
                             child: Image.asset(Images.leftArrow, width: 70)),
@@ -121,11 +109,23 @@ class _AnimalsScreenState extends State<AnimalsScreen> {
                           onTap: () {
                             if (widget.selectedIndex >= 0 &&
                                 widget.selectedIndex < 25) {
-                              print(widget.selectedIndex);
-                              setState(() {
-                                widget.selectedIndex++;
-                              });
-                              speak();
+                              int nextIndex = widget.selectedIndex + 1;
+
+                              // Check if nextIndex is divisible by 5 (but not 0)
+                              if (nextIndex % 7 == 0 && nextIndex != 0) {
+                                InterstitialAdManager.shared
+                                    .showAdAndNavigate(() {
+                                  setState(() {
+                                    widget.selectedIndex = nextIndex;
+                                  });
+                                  speak();
+                                });
+                              } else {
+                                setState(() {
+                                  widget.selectedIndex = nextIndex;
+                                });
+                                speak();
+                              }
                             }
                           },
                           child: Image.asset(Images.rightArrow, width: 70),
@@ -147,7 +147,9 @@ class _AnimalsScreenState extends State<AnimalsScreen> {
                     ),
                   ),
                 ),
-                viewModel.loading ? const LoaderView() : Container()
+                viewModel.loading ? const LoaderView() : Container(),
+                Align(
+                    alignment: Alignment.bottomCenter, child: BannerAdWidget()),
               ],
             ),
           );

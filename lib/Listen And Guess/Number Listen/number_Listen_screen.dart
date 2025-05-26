@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_tts/flutter_tts.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:kids_learning/Ads/InterstitialAdManager.dart';
+import 'package:kids_learning/Ads/bannerAdsManager.dart';
 import 'package:kids_learning/Listen%20And%20Guess/Number%20Listen/numberVM.dart';
 import 'package:kids_learning/Listen%20And%20Guess/ResultScreen/result_screen.dart';
 import 'package:kids_learning/widget/colors.dart';
@@ -17,7 +19,9 @@ class NumberListenScreen extends StatefulWidget {
 class _NumberListenScreenState extends State<NumberListenScreen> {
   final FlutterTts flutterTts = FlutterTts();
   NumberListenVM viewModel = NumberListenVM();
+  late PageController _controller;
   late List<NumberListenModel> shuffledList;
+  late List<bool> isPressedList;
   bool isPressed = false;
   Color istrue = Colors.green;
   Color isWrong = Colors.red;
@@ -27,14 +31,15 @@ class _NumberListenScreenState extends State<NumberListenScreen> {
 
   @override
   void initState() {
+    _controller = PageController(initialPage: 0);
     shuffledList = List<NumberListenModel>.from(viewModel.newList)..shuffle();
+    isPressedList = List.generate(shuffledList.length, (index) => false);
     flutterTts.speak(shuffledList[newIndex ?? 0].numberName!);
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    PageController _controller = PageController(initialPage: 0);
     return Scaffold(
       body: Stack(
         children: [
@@ -73,14 +78,16 @@ class _NumberListenScreenState extends State<NumberListenScreen> {
                     physics: const NeverScrollableScrollPhysics(),
                     itemCount: shuffledList.length,
                     itemBuilder: (context, index) {
+                      final question = shuffledList[index];
+                      final isPressed = isPressedList[index];
                       newIndex = index;
                       return Column(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           const SizedBox(height: 30.0),
                           GestureDetector(
-                              onTap: () => flutterTts
-                                  .speak(shuffledList[index].numberName!),
+                              onTap: () =>
+                                  flutterTts.speak(question.numberName!),
                               child: Image.asset(Images.volume, width: 70)),
                           const SizedBox(height: 30.0),
                           GridView.count(
@@ -95,42 +102,25 @@ class _NumberListenScreenState extends State<NumberListenScreen> {
                               primary: false,
                               children: [
                                 for (int i = 0;
-                                    i < shuffledList[index].answer!.length;
+                                    i < question.answer!.length;
                                     i++)
                                   GestureDetector(
                                     onTap: isPressed
                                         ? () {}
                                         : () {
-                                            if (shuffledList[index]
-                                                .answer!
-                                                .entries
+                                            if (question.answer!.entries
                                                 .toList()[i]
                                                 .value) {
                                               setState(() {
-                                                isPressed = true;
+                                                isPressedList[index] = true;
                                               });
                                               score += 1;
                                               print(score);
-                                              Fluttertoast.showToast(
-                                                  msg: "Your answer is Correct",
-                                                  toastLength:
-                                                      Toast.LENGTH_SHORT,
-                                                  gravity:
-                                                      ToastGravity.BOTTOM_RIGHT,
-                                                  fontSize: 16.0);
                                               flutterTts.speak("Correct");
                                             } else {
                                               setState(() {
-                                                isPressed = true;
+                                                isPressedList[index] = true;
                                               });
-                                              Fluttertoast.showToast(
-                                                  msg:
-                                                      "Your answer is Incorrect",
-                                                  toastLength:
-                                                      Toast.LENGTH_SHORT,
-                                                  gravity:
-                                                      ToastGravity.BOTTOM_RIGHT,
-                                                  fontSize: 16.0);
                                               flutterTts.speak("InCorrect");
                                             }
                                           },
@@ -140,9 +130,7 @@ class _NumberListenScreenState extends State<NumberListenScreen> {
                                           border: Border.all(
                                               width: 5,
                                               color: isPressed
-                                                  ? shuffledList[index]
-                                                          .answer!
-                                                          .entries
+                                                  ? question.answer!.entries
                                                           .toList()[i]
                                                           .value
                                                       ? Colors.green
@@ -161,10 +149,7 @@ class _NumberListenScreenState extends State<NumberListenScreen> {
                                       child: Padding(
                                         padding: const EdgeInsets.all(20.0),
                                         child: Image.asset(
-                                          shuffledList[index]
-                                              .answer!
-                                              .keys
-                                              .toList()[i],
+                                          question.answer!.keys.toList()[i],
                                           // height: 1,
                                           // width: 1,
                                           fit: BoxFit.fill,
@@ -186,13 +171,36 @@ class _NumberListenScreenState extends State<NumberListenScreen> {
                                                       ResultScreen(score)));
                                         }
                                       : () {
-                                          _controller.nextPage(
+                                          final nextIndex = index + 1;
+                                          if (nextIndex % 5 == 0) {
+                                            InterstitialAdManager.shared
+                                                .showAdAndThen(() {
+                                              _controller.nextPage(
+                                                duration: const Duration(
+                                                    milliseconds: 300),
+                                                curve: Curves.linear,
+                                              );
+                                              flutterTts.speak(
+                                                  shuffledList[index + 1]
+                                                      .numberName!);
+                                            });
+                                          } else {
+                                            _controller.nextPage(
                                               duration: const Duration(
+                                                  milliseconds: 300),
+                                              curve: Curves.linear,
+                                            );
+                                            flutterTts.speak(
+                                                shuffledList[index + 1]
+                                                    .numberName!);
+                                          }
+                                          /* _controller.nextPage(
+                                               duration: const Duration(
                                                   microseconds: 500),
                                               curve: Curves.linear);
                                           flutterTts.speak(
                                               shuffledList[index + 1]
-                                                  .numberName!);
+                                                  .numberName!); */
                                         }
                                   : null,
                               child: Image.asset(Images.rightArrow, width: 70)),
@@ -217,6 +225,7 @@ class _NumberListenScreenState extends State<NumberListenScreen> {
               ),
             ),
           ),
+          Align(alignment: Alignment.bottomCenter, child: BannerAdWidget()),
         ],
       ),
     );

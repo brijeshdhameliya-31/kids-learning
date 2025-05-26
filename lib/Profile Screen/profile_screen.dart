@@ -3,6 +3,7 @@ import 'dart:io';
 import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:kids_learning/Ads/bannerAdsManager.dart';
 import 'package:kids_learning/widget/image.dart';
 import 'package:kids_learning/widget/textStyle.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -180,6 +181,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               ),
             ),
           ),
+          Align(alignment: Alignment.bottomCenter, child: BannerAdWidget()),
         ],
       )),
     );

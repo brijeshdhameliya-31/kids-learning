@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_tts/flutter_tts.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:kids_learning/Ads/InterstitialAdManager.dart';
+import 'package:kids_learning/Ads/bannerAdsManager.dart';
 import 'package:kids_learning/Listen%20And%20Guess/Alphabet%20Listen/alphabetsVM.dart';
 import 'package:kids_learning/Listen%20And%20Guess/ResultScreen/result_screen.dart';
 import 'package:kids_learning/widget/colors.dart';
@@ -126,25 +126,8 @@ class _AlpabetsListenScreenState extends State<AlpabetsListenScreen> {
 
                                               if (isCorrect) {
                                                 score++;
-                                                Fluttertoast.showToast(
-                                                  msg: "Your answer is Correct",
-                                                  toastLength:
-                                                      Toast.LENGTH_SHORT,
-                                                  gravity:
-                                                      ToastGravity.BOTTOM_RIGHT,
-                                                  fontSize: 16.0,
-                                                );
                                                 flutterTts.speak("Correct");
                                               } else {
-                                                Fluttertoast.showToast(
-                                                  msg:
-                                                      "Your answer is Incorrect",
-                                                  toastLength:
-                                                      Toast.LENGTH_SHORT,
-                                                  gravity:
-                                                      ToastGravity.BOTTOM_RIGHT,
-                                                  fontSize: 16.0,
-                                                );
                                                 flutterTts.speak("Incorrect");
                                               }
                                             },
@@ -181,12 +164,10 @@ class _AlpabetsListenScreenState extends State<AlpabetsListenScreen> {
                                     ? index + 1 == shuffledList.length
                                         ? () {
                                             Navigator.push(
-                                              context,
-                                              MaterialPageRoute(
-                                                builder: (context) =>
-                                                    ResultScreen(score),
-                                              ),
-                                            );
+                                                context,
+                                                MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        ResultScreen(score)));
                                           }
                                         : () {
                                             final nextIndex = index + 1;
@@ -244,6 +225,7 @@ class _AlpabetsListenScreenState extends State<AlpabetsListenScreen> {
               ),
             ),
           ),
+          Align(alignment: Alignment.bottomCenter, child: BannerAdWidget()),
         ],
       ),
     );

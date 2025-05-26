@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_switch/flutter_switch.dart';
 import 'package:flutter_tts/flutter_tts.dart';
 import 'package:kids_learning/Ads/InterstitialAdManager.dart';
+import 'package:kids_learning/Ads/bannerAdsManager.dart';
 import 'package:kids_learning/Grid%20Screen/Alphabet/alphabetVM.dart';
 import 'package:kids_learning/models/base_viewmodel.dart';
 import 'package:kids_learning/widget/colors.dart';
@@ -169,7 +170,10 @@ class _AlphabetScreenState extends State<AlphabetScreen> {
                           ),
                         ],
                       ),
-                      value.loading ? const LoaderView() : Container()
+                      value.loading ? const LoaderView() : Container(),
+                      Align(
+                        alignment: Alignment.bottomCenter,
+                        child: BannerAdWidget()),
                     ],
                   ),
                 ),

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_tts/flutter_tts.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:kids_learning/Ads/InterstitialAdManager.dart';
+import 'package:kids_learning/Ads/bannerAdsManager.dart';
 import 'package:kids_learning/Listen%20And%20Guess/Color%20Listen/colorsVM.dart';
 import 'package:kids_learning/Listen%20And%20Guess/ResultScreen/result_screen.dart';
 import 'package:kids_learning/widget/colors.dart';
@@ -18,6 +20,8 @@ class _ColorListenScreenState extends State<ColorListenScreen> {
   final FlutterTts flutterTts = FlutterTts();
   ColorsListenVM viewModel = ColorsListenVM();
   late List<ColorListenModel> shuffledList;
+  late PageController _controller;
+  late List<bool> isPressedList;
   bool isPressed = false;
   Color istrue = Colors.green;
   Color isWrong = Colors.red;
@@ -27,14 +31,15 @@ class _ColorListenScreenState extends State<ColorListenScreen> {
 
   @override
   void initState() {
+    _controller = PageController(initialPage: 0);
     shuffledList = List<ColorListenModel>.from(viewModel.newList)..shuffle();
+    isPressedList = List.generate(shuffledList.length, (index) => false);
     flutterTts.speak(shuffledList[newIndex ?? 0].colorName!);
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    PageController _controller = PageController(initialPage: 0);
     return Scaffold(
       body: Stack(
         children: [
@@ -74,13 +79,15 @@ class _ColorListenScreenState extends State<ColorListenScreen> {
                     itemCount: shuffledList.length,
                     itemBuilder: (context, index) {
                       newIndex = index;
+                      final question = shuffledList[index];
+                      final isPressed = isPressedList[index];
                       return Column(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           const SizedBox(height: 30.0),
                           GestureDetector(
-                              onTap: () => flutterTts
-                                  .speak(shuffledList[index].colorName!),
+                              onTap: () =>
+                                  flutterTts.speak(question.colorName!),
                               child: Image.asset(Images.volume, width: 70)),
                           const SizedBox(height: 30.0),
                           GridView.count(
@@ -95,42 +102,25 @@ class _ColorListenScreenState extends State<ColorListenScreen> {
                               primary: false,
                               children: [
                                 for (int i = 0;
-                                    i < shuffledList[index].answer!.length;
+                                    i < question.answer!.length;
                                     i++)
                                   GestureDetector(
                                     onTap: isPressed
                                         ? () {}
                                         : () {
-                                            if (shuffledList[index]
-                                                .answer!
-                                                .entries
+                                            if (question.answer!.entries
                                                 .toList()[i]
                                                 .value) {
                                               setState(() {
-                                                isPressed = true;
+                                                isPressedList[index] = true;
                                               });
                                               score += 1;
                                               print(score);
-                                              Fluttertoast.showToast(
-                                                  msg: "Your answer is Correct",
-                                                  toastLength:
-                                                      Toast.LENGTH_SHORT,
-                                                  gravity:
-                                                      ToastGravity.BOTTOM_RIGHT,
-                                                  fontSize: 16.0);
                                               flutterTts.speak("Correct");
                                             } else {
                                               setState(() {
-                                                isPressed = true;
+                                                isPressedList[index] = true;
                                               });
-                                              Fluttertoast.showToast(
-                                                  msg:
-                                                      "Your answer is Incorrect",
-                                                  toastLength:
-                                                      Toast.LENGTH_SHORT,
-                                                  gravity:
-                                                      ToastGravity.BOTTOM_RIGHT,
-                                                  fontSize: 16.0);
                                               flutterTts.speak("InCorrect");
                                             }
                                           },
@@ -140,9 +130,7 @@ class _ColorListenScreenState extends State<ColorListenScreen> {
                                           border: Border.all(
                                               width: 5,
                                               color: isPressed
-                                                  ? shuffledList[index]
-                                                          .answer!
-                                                          .entries
+                                                  ? question.answer!.entries
                                                           .toList()[i]
                                                           .value
                                                       ? Colors.green
@@ -161,10 +149,7 @@ class _ColorListenScreenState extends State<ColorListenScreen> {
                                       child: Padding(
                                         padding: const EdgeInsets.all(20.0),
                                         child: Image.asset(
-                                          shuffledList[index]
-                                              .answer!
-                                              .keys
-                                              .toList()[i],
+                                          question.answer!.keys.toList()[i],
                                           // height: 1,
                                           // width: 1,
                                           fit: BoxFit.fill,
@@ -186,13 +171,30 @@ class _ColorListenScreenState extends State<ColorListenScreen> {
                                                       ResultScreen(score)));
                                         }
                                       : () {
-                                          _controller.nextPage(
+                                          final nextIndex = index + 1;
+
+                                          if (nextIndex % 5 == 0) {
+                                            InterstitialAdManager.shared
+                                                .showAdAndThen(() {
+                                              _controller.nextPage(
+                                                duration: const Duration(
+                                                    milliseconds: 300),
+                                                curve: Curves.linear,
+                                              );
+                                              flutterTts.speak(
+                                                  shuffledList[index + 1]
+                                                      .colorName!);
+                                            });
+                                          } else {
+                                            _controller.nextPage(
                                               duration: const Duration(
-                                                  microseconds: 500),
-                                              curve: Curves.linear);
-                                          flutterTts.speak(
-                                              shuffledList[index + 1]
-                                                  .colorName!);
+                                                  milliseconds: 300),
+                                              curve: Curves.linear,
+                                            );
+                                            flutterTts.speak(
+                                                shuffledList[index + 1]
+                                                    .colorName!);
+                                          }
                                         }
                                   : null,
                               child: Image.asset(Images.rightArrow, width: 70)),
@@ -217,6 +219,7 @@ class _ColorListenScreenState extends State<ColorListenScreen> {
               ),
             ),
           ),
+          Align(alignment: Alignment.bottomCenter, child: BannerAdWidget()),
         ],
       ),
     );

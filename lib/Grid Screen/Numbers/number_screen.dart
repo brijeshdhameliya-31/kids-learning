@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_tts/flutter_tts.dart';
 import 'package:kids_learning/Ads/InterstitialAdManager.dart';
+import 'package:kids_learning/Ads/bannerAdsManager.dart';
 import 'package:kids_learning/Grid%20Screen/Numbers/numberVM.dart';
+import 'package:kids_learning/models/base_viewmodel.dart';
 import 'package:kids_learning/widget/colors.dart';
 import 'package:kids_learning/widget/image.dart';
 import 'package:kids_learning/widget/textStyle.dart';
@@ -88,12 +90,28 @@ class _NumberScreenState extends State<NumberScreen> {
                       children: [
                         InkWell(
                             onTap: () {
-                              if (widget.selectedIndex >= 0 &&
+                               if (widget.selectedIndex > 0 &&
+                                        widget.selectedIndex <= 100) {
+                                      setState(() {
+                                        widget.selectedIndex--;
+                                      });
+                                      speak();
+                                    }
+                            },
+                            child: Image.asset(Images.leftArrow, width: 70)),
+                        InkWell(
+                            onTap: () {
+                              speak();
+                            },
+                            child: Image.asset(Images.volume, width: 70)),
+                        GestureDetector(
+                          onTap: () {
+                            if (widget.selectedIndex >= 0 &&
                                       widget.selectedIndex < 100) {
                                     int nextIndex = widget.selectedIndex + 1;
 
                                     // Check if nextIndex is divisible by 5 (but not 0)
-                                    if (nextIndex % 5 == 0 && nextIndex != 0) {
+                                    if (nextIndex % 7 == 0 && nextIndex != 0) {
                                       InterstitialAdManager.shared
                                           .showAdAndNavigate(() {
                                         setState(() {
@@ -108,23 +126,6 @@ class _NumberScreenState extends State<NumberScreen> {
                                       speak();
                                     }
                                   }
-                            },
-                            child: Image.asset(Images.leftArrow, width: 70)),
-                        InkWell(
-                            onTap: () {
-                              speak();
-                            },
-                            child: Image.asset(Images.volume, width: 70)),
-                        GestureDetector(
-                          onTap: () {
-                            if (widget.selectedIndex >= 0 &&
-                                widget.selectedIndex < 100) {
-                              print(widget.selectedIndex);
-                              setState(() {
-                                widget.selectedIndex++;
-                              });
-                              speak();
-                            }
                           },
                           child: Image.asset(Images.rightArrow, width: 70),
                         ),
@@ -144,7 +145,11 @@ class _NumberScreenState extends State<NumberScreen> {
                           icon: Image.asset(Images.backArrow, width: 45)),
                     ),
                   ),
-                )
+                ),
+                  viewModel.loading ? const LoaderView() : Container(),
+                 Align(
+                        alignment: Alignment.bottomCenter,
+                        child: BannerAdWidget()),
               ],
             ),
           );

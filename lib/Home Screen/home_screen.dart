@@ -24,6 +24,7 @@ import 'package:kids_learning/Grid%20Screen/Vegetables/vegetableListScreen.dart'
 import 'package:kids_learning/Grid%20Screen/Vehicles/vehiclesListScreen.dart';
 import 'package:kids_learning/Home%20Screen/homeVM.dart';
 import 'package:kids_learning/Profile%20Screen/profile_screen.dart';
+import 'package:kids_learning/pageview/pageview_screen.dart';
 import 'package:kids_learning/widget/colors.dart';
 import 'package:kids_learning/widget/textStyle.dart';
 import 'package:provider/provider.dart';
@@ -239,6 +240,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                     const SizedBox(height: 10),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Expanded(
                           child: Row(
@@ -246,34 +248,29 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                               const SizedBox(width: 15),
                               Padding(
                                 padding: const EdgeInsets.only(right: 15),
-                                child: InkWell(
-                                  onTap: () {
-                                    profileAction();
-                                  },
-                                  child: Container(
-                                    width: 73,
-                                    height: 73,
-                                    decoration: const BoxDecoration(
-                                        color: AppColors.pink,
-                                        shape: BoxShape.circle),
-                                    child: imageBytes != null
-                                        ? CircleAvatar(
-                                            radius: 35,
-                                            backgroundImage:
-                                                MemoryImage(imageBytes!),
-                                          )
-                                        : Container(
-                                            height: 73,
-                                            width: 73,
-                                            decoration: const BoxDecoration(
-                                                shape: BoxShape.circle),
-                                            child: ClipRRect(
-                                              child: Image.asset(
-                                                "assets/images/homeIcon/profile_placeholder.png",
-                                                fit: BoxFit.fill,
-                                              ),
-                                            )),
-                                  ),
+                                child: Container(
+                                  width: 65,
+                                  height: 65,
+                                  decoration: const BoxDecoration(
+                                      color: AppColors.pink,
+                                      shape: BoxShape.circle),
+                                  child: imageBytes != null
+                                      ? CircleAvatar(
+                                          radius: 35,
+                                          backgroundImage:
+                                              MemoryImage(imageBytes!),
+                                        )
+                                      : Container(
+                                          height: 65,
+                                          width: 65,
+                                          decoration: const BoxDecoration(
+                                              shape: BoxShape.circle),
+                                          child: ClipRRect(
+                                            child: Image.asset(
+                                              "assets/images/homeIcon/profile_placeholder.png",
+                                              fit: BoxFit.fill,
+                                            ),
+                                          )),
                                 ),
                               ),
                               Expanded(
@@ -313,6 +310,39 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                             ],
                           ),
                         ),
+                        PopupMenuButton<String>(
+                            onSelected: (value) {
+                              print('Selected: $value');
+                            },
+                            itemBuilder: (BuildContext context) => [
+                                  PopupMenuItem(
+                                      value: "Option 1",
+                                      onTap: () {
+                                        profileAction();
+                                      },
+                                      child: Text(
+                                        "Profile",
+                                        style: CustomTextStyle.medium.copyWith(
+                                            color: AppColors.black,
+                                            fontSize: 15),
+                                      )),
+                                  PopupMenuItem(
+                                      value: "Option 1",
+                                      onTap: () {
+                                        showAlert();
+                                      },
+                                      child: Text(
+                                        "Logout",
+                                        style: CustomTextStyle.medium.copyWith(
+                                            color: AppColors.black,
+                                            fontSize: 15),
+                                      )),
+                                ],
+                            offset: const Offset(0, 50),
+                            child: Padding(
+                              padding: const EdgeInsets.only(right: 7, top: 10),
+                              child: Icon(Icons.more_vert, size: 30),
+                            )),
                       ],
                     ),
                     const SizedBox(height: 10),
@@ -407,6 +437,65 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
               ),
             ),
           ],
+        ),
+      ),
+    );
+  }
+
+  showAlert() {
+    return showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+              title: Text(
+                "Kids Learning",
+                textAlign: TextAlign.center,
+                style: CustomTextStyle.semibold
+                    .copyWith(color: AppColors.black, fontSize: 16),
+              ),
+              content: Text(
+                "Are you sure you want to logout?",
+                textAlign: TextAlign.center,
+                style: CustomTextStyle.medium
+                    .copyWith(fontSize: 14, color: AppColors.black),
+              ),
+              actions: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    buttons("No", Colors.red, () => Navigator.pop(context)),
+                    const SizedBox(width: 12),
+                    buttons("Yes", Colors.green, () => logoutAction())
+                  ],
+                )
+              ],
+            ));
+  }
+
+  logoutAction() async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    preferences.remove("skipData");
+    preferences.remove("formData");
+    preferences.remove("userName");
+    preferences.remove("profileImage");
+    Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(builder: (context) => const PageViewScreen()),
+        (route) => false);
+  }
+
+  Widget buttons(String title, Color color, Function() onTap) {
+    return InkWell(
+      onTap: () => onTap(),
+      child: Container(
+        height: 45,
+        width: 70,
+        decoration: BoxDecoration(
+            color: color, borderRadius: BorderRadius.circular(10)),
+        child: Center(
+          child: Text(title,
+              style: CustomTextStyle.medium
+                  .copyWith(color: AppColors.white, fontSize: 15)),
         ),
       ),
     );

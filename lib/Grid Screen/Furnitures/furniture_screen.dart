@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_tts/flutter_tts.dart';
 import 'package:kids_learning/Ads/InterstitialAdManager.dart';
+import 'package:kids_learning/Ads/bannerAdsManager.dart';
 import 'package:kids_learning/Grid%20Screen/Furnitures/furnitureVM.dart';
 import 'package:kids_learning/models/base_viewmodel.dart';
 import 'package:kids_learning/widget/colors.dart';
@@ -10,14 +11,14 @@ import 'package:provider/provider.dart';
 
 class FurnitureScreen extends StatefulWidget {
   int selectedIndex;
-   FurnitureScreen(this.selectedIndex,{super.key});
+  FurnitureScreen(this.selectedIndex, {super.key});
 
   @override
   State<FurnitureScreen> createState() => _FurnitureScreenState();
 }
 
 class _FurnitureScreenState extends State<FurnitureScreen> {
- final FlutterTts flutterTts = FlutterTts();
+  final FlutterTts flutterTts = FlutterTts();
   int? addIndex;
   FurnitureVM viewModel = FurnitureVM();
   bool volume = true;
@@ -25,7 +26,7 @@ class _FurnitureScreenState extends State<FurnitureScreen> {
   @override
   void initState() {
     addIndex = widget.selectedIndex;
-     flutterTts.speak(viewModel.furnitureList[widget.selectedIndex].itemName!);
+    flutterTts.speak(viewModel.furnitureList[widget.selectedIndex].itemName!);
     super.initState();
   }
 
@@ -75,10 +76,11 @@ class _FurnitureScreenState extends State<FurnitureScreen> {
                           fontSize: 45, color: AppColors.textTitleColor),
                     ),
                     const SizedBox(height: 70),
-                   SizedBox(
+                    SizedBox(
                       height: 220,
                       child: Image.asset(
-                          viewModel.furnitureList[widget.selectedIndex].itemImage
+                          viewModel
+                              .furnitureList[widget.selectedIndex].itemImage
                               .toString(),
                           width: 220),
                     ),
@@ -89,26 +91,13 @@ class _FurnitureScreenState extends State<FurnitureScreen> {
                       children: [
                         InkWell(
                             onTap: () {
-                              if (widget.selectedIndex >= 0 &&
-                                      widget.selectedIndex < 17) {
-                                    int nextIndex = widget.selectedIndex + 1;
-
-                                    // Check if nextIndex is divisible by 5 (but not 0)
-                                    if (nextIndex % 5 == 0 && nextIndex != 0) {
-                                      InterstitialAdManager.shared
-                                          .showAdAndNavigate(() {
-                                        setState(() {
-                                          widget.selectedIndex = nextIndex;
-                                        });
-                                        speak();
-                                      });
-                                    } else {
-                                      setState(() {
-                                        widget.selectedIndex = nextIndex;
-                                      });
-                                      speak();
-                                    }
-                                  }
+                              if (widget.selectedIndex > 0 &&
+                                  widget.selectedIndex <= 17) {
+                                setState(() {
+                                  widget.selectedIndex--;
+                                });
+                                speak();
+                              }
                             },
                             child: Image.asset(Images.leftArrow, width: 70)),
                         InkWell(
@@ -120,11 +109,23 @@ class _FurnitureScreenState extends State<FurnitureScreen> {
                           onTap: () {
                             if (widget.selectedIndex >= 0 &&
                                 widget.selectedIndex < 17) {
-                              print(widget.selectedIndex);
-                              setState(() {
-                                widget.selectedIndex++;
-                              });
-                              speak();
+                              int nextIndex = widget.selectedIndex + 1;
+
+                              // Check if nextIndex is divisible by 5 (but not 0)
+                              if (nextIndex % 7 == 0 && nextIndex != 0) {
+                                InterstitialAdManager.shared
+                                    .showAdAndNavigate(() {
+                                  setState(() {
+                                    widget.selectedIndex = nextIndex;
+                                  });
+                                  speak();
+                                });
+                              } else {
+                                setState(() {
+                                  widget.selectedIndex = nextIndex;
+                                });
+                                speak();
+                              }
                             }
                           },
                           child: Image.asset(Images.rightArrow, width: 70),
@@ -146,8 +147,9 @@ class _FurnitureScreenState extends State<FurnitureScreen> {
                     ),
                   ),
                 ),
-                viewModel.loading ? const LoaderView() : Container()
-                
+                viewModel.loading ? const LoaderView() : Container(),
+                Align(
+                    alignment: Alignment.bottomCenter, child: BannerAdWidget()),
               ],
             ),
           );

@@ -28,8 +28,8 @@ class ListenVM extends BaseVM {
         type: ListenGuessType.count),
     ListenGuessModel(
         name: "Fill in the blank",
-        image: "assets/images/homeIcon/count_guess.jpg",
-        color: Colors.grey.shade200,
+        image: "assets/images/homeIcon/fill_blank.png",
+        color: Colors.pink.shade100,
         type: ListenGuessType.missing)
   ];
 }

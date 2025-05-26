@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_tts/flutter_tts.dart';
 import 'package:kids_learning/Ads/InterstitialAdManager.dart';
+import 'package:kids_learning/Ads/bannerAdsManager.dart';
 import 'package:kids_learning/Grid%20Screen/AqauticAnimal/aquaticAnimalModel.dart';
 import 'package:kids_learning/Grid%20Screen/AqauticAnimal/aquaticAnimal_VM.dart';
 import 'package:kids_learning/models/base_viewmodel.dart';
@@ -90,25 +91,12 @@ class _AquaticAnimalScreenState extends State<AquaticAnimalScreen> {
                       children: [
                         InkWell(
                             onTap: () {
-                              if (widget.selectedIndex >= 0 &&
-                                  widget.selectedIndex < 15) {
-                                int nextIndex = widget.selectedIndex + 1;
-
-                                // Check if nextIndex is divisible by 5 (but not 0)
-                                if (nextIndex % 5 == 0 && nextIndex != 0) {
-                                  InterstitialAdManager.shared
-                                      .showAdAndNavigate(() {
-                                    setState(() {
-                                      widget.selectedIndex = nextIndex;
-                                    });
-                                    speak();
-                                  });
-                                } else {
-                                  setState(() {
-                                    widget.selectedIndex = nextIndex;
-                                  });
-                                  speak();
-                                }
+                              if (widget.selectedIndex > 0 &&
+                                  widget.selectedIndex <= 15) {
+                                setState(() {
+                                  widget.selectedIndex--;
+                                });
+                                speak();
                               }
                             },
                             child: Image.asset(Images.leftArrow, width: 70)),
@@ -121,11 +109,23 @@ class _AquaticAnimalScreenState extends State<AquaticAnimalScreen> {
                           onTap: () {
                             if (widget.selectedIndex >= 0 &&
                                 widget.selectedIndex < 15) {
-                              print(widget.selectedIndex);
-                              setState(() {
-                                widget.selectedIndex++;
-                              });
-                              speak();
+                              int nextIndex = widget.selectedIndex + 1;
+
+                              // Check if nextIndex is divisible by 5 (but not 0)
+                              if (nextIndex % 7 == 0 && nextIndex != 0) {
+                                InterstitialAdManager.shared
+                                    .showAdAndNavigate(() {
+                                  setState(() {
+                                    widget.selectedIndex = nextIndex;
+                                  });
+                                  speak();
+                                });
+                              } else {
+                                setState(() {
+                                  widget.selectedIndex = nextIndex;
+                                });
+                                speak();
+                              }
                             }
                           },
                           child: Image.asset(Images.rightArrow, width: 70),
@@ -147,7 +147,9 @@ class _AquaticAnimalScreenState extends State<AquaticAnimalScreen> {
                     ),
                   ),
                 ),
-                viewModel.loading ? const LoaderView() : Container()
+                viewModel.loading ? const LoaderView() : Container(),
+                Align(
+                    alignment: Alignment.bottomCenter, child: BannerAdWidget()),
               ],
             ),
           );

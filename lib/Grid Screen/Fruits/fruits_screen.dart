@@ -1,7 +1,7 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_tts/flutter_tts.dart';
 import 'package:kids_learning/Ads/InterstitialAdManager.dart';
+import 'package:kids_learning/Ads/bannerAdsManager.dart';
 import 'package:kids_learning/Grid%20Screen/Fruits/fruitVM.dart';
 import 'package:kids_learning/models/base_viewmodel.dart';
 import 'package:kids_learning/widget/colors.dart';
@@ -11,14 +11,14 @@ import 'package:provider/provider.dart';
 
 class FruitScreen extends StatefulWidget {
   int selectedIndex;
-   FruitScreen(this.selectedIndex ,{super.key});
+  FruitScreen(this.selectedIndex, {super.key});
 
   @override
   State<FruitScreen> createState() => _FruitScreenState();
 }
 
 class _FruitScreenState extends State<FruitScreen> {
- final FlutterTts flutterTts = FlutterTts();
+  final FlutterTts flutterTts = FlutterTts();
   int? addIndex;
   FruitVM viewModel = FruitVM();
   bool volume = true;
@@ -26,7 +26,7 @@ class _FruitScreenState extends State<FruitScreen> {
   @override
   void initState() {
     addIndex = widget.selectedIndex;
-     flutterTts.speak(viewModel.fruitList[widget.selectedIndex].fruitName!);
+    flutterTts.speak(viewModel.fruitList[widget.selectedIndex].fruitName!);
     super.initState();
   }
 
@@ -76,7 +76,7 @@ class _FruitScreenState extends State<FruitScreen> {
                           fontSize: 45, color: AppColors.textTitleColor),
                     ),
                     const SizedBox(height: 70),
-                   SizedBox(
+                    SizedBox(
                       height: 220,
                       child: Image.asset(
                           viewModel.fruitList[widget.selectedIndex].fruitImage
@@ -90,26 +90,13 @@ class _FruitScreenState extends State<FruitScreen> {
                       children: [
                         InkWell(
                             onTap: () {
-                              if (widget.selectedIndex >= 0 &&
-                                      widget.selectedIndex < 23) {
-                                    int nextIndex = widget.selectedIndex + 1;
-
-                                    // Check if nextIndex is divisible by 5 (but not 0)
-                                    if (nextIndex % 5 == 0 && nextIndex != 0) {
-                                      InterstitialAdManager.shared
-                                          .showAdAndNavigate(() {
-                                        setState(() {
-                                          widget.selectedIndex = nextIndex;
-                                        });
-                                        speak();
-                                      });
-                                    } else {
-                                      setState(() {
-                                        widget.selectedIndex = nextIndex;
-                                      });
-                                      speak();
-                                    }
-                                  }
+                              if (widget.selectedIndex > 0 &&
+                                  widget.selectedIndex <= 23) {
+                                setState(() {
+                                  widget.selectedIndex--;
+                                });
+                                speak();
+                              }
                             },
                             child: Image.asset(Images.leftArrow, width: 70)),
                         InkWell(
@@ -121,11 +108,23 @@ class _FruitScreenState extends State<FruitScreen> {
                           onTap: () {
                             if (widget.selectedIndex >= 0 &&
                                 widget.selectedIndex < 23) {
-                              print(widget.selectedIndex);
-                              setState(() {
-                                widget.selectedIndex++;
-                              });
-                              speak();
+                              int nextIndex = widget.selectedIndex + 1;
+
+                              // Check if nextIndex is divisible by 5 (but not 0)
+                              if (nextIndex % 7 == 0 && nextIndex != 0) {
+                                InterstitialAdManager.shared
+                                    .showAdAndNavigate(() {
+                                  setState(() {
+                                    widget.selectedIndex = nextIndex;
+                                  });
+                                  speak();
+                                });
+                              } else {
+                                setState(() {
+                                  widget.selectedIndex = nextIndex;
+                                });
+                                speak();
+                              }
                             }
                           },
                           child: Image.asset(Images.rightArrow, width: 70),
@@ -147,8 +146,9 @@ class _FruitScreenState extends State<FruitScreen> {
                     ),
                   ),
                 ),
-                viewModel.loading ? const LoaderView() : Container()
-                
+                viewModel.loading ? const LoaderView() : Container(),
+                Align(
+                    alignment: Alignment.bottomCenter, child: BannerAdWidget()),
               ],
             ),
           );

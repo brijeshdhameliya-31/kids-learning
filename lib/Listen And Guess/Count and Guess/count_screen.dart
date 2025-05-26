@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_tts/flutter_tts.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:kids_learning/Ads/InterstitialAdManager.dart';
+import 'package:kids_learning/Ads/bannerAdsManager.dart';
 import 'package:kids_learning/Listen%20And%20Guess/Count%20and%20Guess/count_vm.dart';
 import 'package:kids_learning/Listen%20And%20Guess/ResultScreen/result_screen.dart';
 import 'package:kids_learning/widget/colors.dart';
@@ -17,6 +19,8 @@ class CountScreen extends StatefulWidget {
 class _CountScreenState extends State<CountScreen> {
   CountVM viewModel = CountVM();
   final FlutterTts flutterTts = FlutterTts();
+  late PageController _controller;
+  late List<bool> isPressedList;
   int score = 0;
   bool isPressed = false;
   late List<CountModel> shuffledList;
@@ -25,12 +29,13 @@ class _CountScreenState extends State<CountScreen> {
   void initState() {
     // TODO: implement initState
     super.initState();
+    _controller = PageController(initialPage: 0);
     shuffledList = List<CountModel>.from(viewModel.countlist)..shuffle();
+    isPressedList = List.generate(shuffledList.length, (index) => false);
   }
 
   @override
   Widget build(BuildContext context) {
-    PageController _controller = PageController(initialPage: 0);
     return Scaffold(
       body: Stack(
         children: [
@@ -76,6 +81,7 @@ class _CountScreenState extends State<CountScreen> {
                     itemCount: shuffledList.length,
                     itemBuilder: (context, index) {
                       final question = shuffledList[index];
+                      final isPressed = isPressedList[index];
                       return Column(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
@@ -107,40 +113,24 @@ class _CountScreenState extends State<CountScreen> {
                             crossAxisSpacing: 30,
                             physics: const NeverScrollableScrollPhysics(),
                             children: [
-                              for (int i = 0;
-                                  i < shuffledList[index].answer!.length;
-                                  i++)
+                              for (int i = 0; i < question.answer!.length; i++)
                                 GestureDetector(
                                   onTap: isPressed
                                       ? () {}
                                       : () {
-                                          if (shuffledList[index]
-                                              .answer!
-                                              .entries
+                                          if (question.answer!.entries
                                               .toList()[i]
                                               .value) {
                                             setState(() {
-                                              isPressed = true;
+                                              isPressedList[index] = true;
                                             });
                                             score += 1;
                                             print(score);
-                                            Fluttertoast.showToast(
-                                                msg: "Your answer is Correct",
-                                                toastLength: Toast.LENGTH_SHORT,
-                                                gravity:
-                                                    ToastGravity.BOTTOM_RIGHT,
-                                                fontSize: 16.0);
                                             flutterTts.speak("Correct");
                                           } else {
                                             setState(() {
-                                              isPressed = true;
+                                              isPressedList[index] = true;
                                             });
-                                            Fluttertoast.showToast(
-                                                msg: "Your answer is Incorrect",
-                                                toastLength: Toast.LENGTH_SHORT,
-                                                gravity:
-                                                    ToastGravity.BOTTOM_RIGHT,
-                                                fontSize: 16.0);
                                             flutterTts.speak("InCorrect");
                                           }
                                         },
@@ -150,9 +140,7 @@ class _CountScreenState extends State<CountScreen> {
                                         border: Border.all(
                                             width: 5,
                                             color: isPressed
-                                                ? shuffledList[index]
-                                                        .answer!
-                                                        .entries
+                                                ? question.answer!.entries
                                                         .toList()[i]
                                                         .value
                                                     ? Colors.green
@@ -171,10 +159,7 @@ class _CountScreenState extends State<CountScreen> {
                                     child: Padding(
                                       padding: const EdgeInsets.all(20.0),
                                       child: Image.asset(
-                                        shuffledList[index]
-                                            .answer!
-                                            .keys
-                                            .toList()[i],
+                                        question.answer!.keys.toList()[i],
                                         // height: 1,
                                         // width: 1,
                                         fit: BoxFit.fill,
@@ -198,12 +183,26 @@ class _CountScreenState extends State<CountScreen> {
                                         }
                                       : () {
                                           setState(() {
-                                            isPressed = false;
+                                            isPressedList[index] = false;
                                           });
-                                          _controller.nextPage(
+                                          final nextIndex = index + 1;
+
+                                          if (nextIndex % 5 == 0) {
+                                            InterstitialAdManager.shared
+                                                .showAdAndThen(() {
+                                              _controller.nextPage(
+                                                duration: const Duration(
+                                                    milliseconds: 300),
+                                                curve: Curves.linear,
+                                              );
+                                            });
+                                          } else {
+                                            _controller.nextPage(
                                               duration: const Duration(
-                                                  microseconds: 500),
-                                              curve: Curves.linear);
+                                                  milliseconds: 300),
+                                              curve: Curves.linear,
+                                            );
+                                          }
                                           // flutterTts.speak(viewModel
                                           //     .newList[index + 1].numberName!);
                                         }
@@ -231,6 +230,7 @@ class _CountScreenState extends State<CountScreen> {
               ),
             ),
           ),
+          Align(alignment: Alignment.bottomCenter, child: BannerAdWidget()),
         ],
       ),
     );

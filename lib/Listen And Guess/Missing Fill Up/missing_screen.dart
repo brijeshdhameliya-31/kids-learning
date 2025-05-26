@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_tts/flutter_tts.dart';
+import 'package:kids_learning/Ads/InterstitialAdManager.dart';
+import 'package:kids_learning/Ads/bannerAdsManager.dart';
 import 'package:kids_learning/Listen%20And%20Guess/Missing%20Fill%20Up/missing_vm.dart';
 import 'package:kids_learning/Listen%20And%20Guess/ResultScreen/result_screen.dart';
 import 'package:kids_learning/widget/colors.dart';
@@ -19,7 +21,16 @@ class _MissingScreenState extends State<MissingScreen> {
   int currentIndex = 0;
   int score = 0;
   bool isAnswered = false;
+  late List<SequenceQuestion> shuffledList;
   int? selectedAnswer;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    shuffledList = List<SequenceQuestion>.from(viewModel.sequenceQuestions)
+      ..shuffle();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -62,10 +73,10 @@ class _MissingScreenState extends State<MissingScreen> {
                   child: PageView.builder(
                       controller: _controller,
                       physics: const NeverScrollableScrollPhysics(),
-                      itemCount: viewModel.sequenceQuestions.length,
+                      itemCount: shuffledList.length,
                       itemBuilder: (context, index) {
                         final question =
-                            viewModel.sequenceQuestions[currentIndex];
+                            shuffledList[currentIndex];
                         return Column(
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
@@ -135,19 +146,34 @@ class _MissingScreenState extends State<MissingScreen> {
                             if (isAnswered)
                               GestureDetector(
                                 onTap: () {
-                                  if (currentIndex + 1 <
-                                      viewModel.sequenceQuestions.length) {
-                                    setState(() {
-                                      currentIndex++;
-                                      isAnswered = false;
-                                      selectedAnswer = null;
-                                    });
-                                  } else {
-                                    Navigator.push(
+                                  if (!isAnswered)
+                                    return; // Prevent skipping without answering
+
+                                  void goToNextQuestion() {
+                                    if (currentIndex + 1 <
+                                        shuffledList.length) {
+                                      setState(() {
+                                        currentIndex++;
+                                        isAnswered = false;
+                                        selectedAnswer = null;
+                                      });
+                                    } else {
+                                      Navigator.pushReplacement(
                                         context,
                                         MaterialPageRoute(
-                                            builder: (context) =>
-                                                ResultScreen(score)));
+                                          builder: (context) =>
+                                              ResultScreen(score),
+                                        ),
+                                      );
+                                    }
+                                  }
+
+                                  // Show ad every 5th question (after 5, 10, 15...)
+                                  if ((currentIndex + 1) % 5 == 0) {
+                                    InterstitialAdManager.shared
+                                        .showAdAndThen(goToNextQuestion);
+                                  } else {
+                                    goToNextQuestion();
                                   }
                                 },
                                 child:
@@ -174,6 +200,7 @@ class _MissingScreenState extends State<MissingScreen> {
               ),
             ),
           ),
+          Align(alignment: Alignment.bottomCenter, child: BannerAdWidget()),
         ],
       ),
     );

@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:kids_learning/Ads/InterstitialAdManager.dart';
+import 'package:kids_learning/Ads/bannerAdsManager.dart';
 import 'package:kids_learning/Profile%20Screen/profile_screen.dart';
 import 'package:kids_learning/pageview/pageview_screen.dart';
 import 'package:kids_learning/widget/colors.dart';
@@ -91,6 +92,7 @@ class _SettingScreenState extends State<SettingScreen> {
                 "assets/images/homeIcon/setting_up.png",
                 width: 300,
               )),
+          Align(alignment: Alignment.bottomCenter, child: BannerAdWidget()),
         ],
       ),
     );

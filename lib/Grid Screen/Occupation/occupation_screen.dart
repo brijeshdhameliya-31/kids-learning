@@ -1,7 +1,7 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_tts/flutter_tts.dart';
 import 'package:kids_learning/Ads/InterstitialAdManager.dart';
+import 'package:kids_learning/Ads/bannerAdsManager.dart';
 import 'package:kids_learning/Grid%20Screen/Occupation/occupationVM.dart';
 import 'package:kids_learning/models/base_viewmodel.dart';
 import 'package:kids_learning/widget/colors.dart';
@@ -11,7 +11,7 @@ import 'package:provider/provider.dart';
 
 class OccupationScreen extends StatefulWidget {
   int selectedIndex;
-   OccupationScreen(this.selectedIndex,{super.key});
+  OccupationScreen(this.selectedIndex, {super.key});
 
   @override
   State<OccupationScreen> createState() => _OccupationScreenState();
@@ -26,7 +26,8 @@ class _OccupationScreenState extends State<OccupationScreen> {
   @override
   void initState() {
     addIndex = widget.selectedIndex;
-     flutterTts.speak(viewModel.occupationList[widget.selectedIndex].occupationName!);
+    flutterTts
+        .speak(viewModel.occupationList[widget.selectedIndex].occupationName!);
     super.initState();
   }
 
@@ -76,10 +77,11 @@ class _OccupationScreenState extends State<OccupationScreen> {
                           fontSize: 45, color: AppColors.textTitleColor),
                     ),
                     const SizedBox(height: 70),
-                   SizedBox(
+                    SizedBox(
                       height: 220,
                       child: Image.asset(
-                          viewModel.occupationList[widget.selectedIndex].occupationImage
+                          viewModel.occupationList[widget.selectedIndex]
+                              .occupationImage
                               .toString(),
                           width: 220),
                     ),
@@ -90,26 +92,13 @@ class _OccupationScreenState extends State<OccupationScreen> {
                       children: [
                         InkWell(
                             onTap: () {
-                               if (widget.selectedIndex >= 0 &&
-                                      widget.selectedIndex < 25) {
-                                    int nextIndex = widget.selectedIndex + 1;
-
-                                    // Check if nextIndex is divisible by 5 (but not 0)
-                                    if (nextIndex % 5 == 0 && nextIndex != 0) {
-                                      InterstitialAdManager.shared
-                                          .showAdAndNavigate(() {
-                                        setState(() {
-                                          widget.selectedIndex = nextIndex;
-                                        });
-                                        speak();
-                                      });
-                                    } else {
-                                      setState(() {
-                                        widget.selectedIndex = nextIndex;
-                                      });
-                                      speak();
-                                    }
-                                  }
+                              if (widget.selectedIndex > 0 &&
+                                  widget.selectedIndex <= 25) {
+                                setState(() {
+                                  widget.selectedIndex--;
+                                });
+                                speak();
+                              }
                             },
                             child: Image.asset(Images.leftArrow, width: 70)),
                         InkWell(
@@ -121,11 +110,23 @@ class _OccupationScreenState extends State<OccupationScreen> {
                           onTap: () {
                             if (widget.selectedIndex >= 0 &&
                                 widget.selectedIndex < 25) {
-                              print(widget.selectedIndex);
-                              setState(() {
-                                widget.selectedIndex++;
-                              });
-                              speak();
+                              int nextIndex = widget.selectedIndex + 1;
+
+                              // Check if nextIndex is divisible by 5 (but not 0)
+                              if (nextIndex % 7 == 0 && nextIndex != 0) {
+                                InterstitialAdManager.shared
+                                    .showAdAndNavigate(() {
+                                  setState(() {
+                                    widget.selectedIndex = nextIndex;
+                                  });
+                                  speak();
+                                });
+                              } else {
+                                setState(() {
+                                  widget.selectedIndex = nextIndex;
+                                });
+                                speak();
+                              }
                             }
                           },
                           child: Image.asset(Images.rightArrow, width: 70),
@@ -147,8 +148,9 @@ class _OccupationScreenState extends State<OccupationScreen> {
                     ),
                   ),
                 ),
-                viewModel.loading ? const LoaderView() : Container()
-                
+                viewModel.loading ? const LoaderView() : Container(),
+                Align(
+                    alignment: Alignment.bottomCenter, child: BannerAdWidget()),
               ],
             ),
           );
