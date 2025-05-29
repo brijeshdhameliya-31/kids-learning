@@ -48,7 +48,8 @@ dependencies:
   image_picker: ^1.1.2
   google_mobile_ads: any
   confetti: any
-
+  url_launcher: any
+  flutter_staggered_animations: any
 
 dev_dependencies:
   flutter_test:

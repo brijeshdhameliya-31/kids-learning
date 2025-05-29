@@ -8,6 +8,7 @@ import 'package:kids_learning/pageview/pageview_screen.dart';
 import 'package:kids_learning/widget/colors.dart';
 import 'package:kids_learning/widget/textStyle.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class SettingScreen extends StatefulWidget {
   const SettingScreen({super.key});
@@ -27,6 +28,15 @@ class _SettingScreenState extends State<SettingScreen> {
         context,
         MaterialPageRoute(builder: (context) => const PageViewScreen()),
         (route) => false);
+  }
+
+  Future<void> launchPolicy() async {
+    final Uri _url = Uri.parse(
+        'https://sites.google.com/view/kids-learningprivacy-policy/home');
+
+    if (!await launchUrl(_url, mode: LaunchMode.externalApplication)) {
+      throw 'Could not launch $_url';
+    }
   }
 
   @override
@@ -77,6 +87,8 @@ class _SettingScreenState extends State<SettingScreen> {
                         ),
                         const SizedBox(height: 20),
                         profile(),
+                        const SizedBox(height: 20),
+                        privacyPolicy(),
                         const SizedBox(height: 20),
                         logout(),
                       ],
@@ -209,6 +221,42 @@ class _SettingScreenState extends State<SettingScreen> {
                 const SizedBox(width: 10),
                 Text(
                   "Profile",
+                  style: CustomTextStyle.semibold
+                      .copyWith(color: AppColors.textTitleColor, fontSize: 17),
+                )
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget privacyPolicy() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 20),
+      child: InkWell(
+        onTap: () {
+          launchPolicy();
+        },
+        child: Container(
+          decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(10),
+              color: Colors.lightBlue.shade50,
+              boxShadow: const [
+                BoxShadow(
+                    color: AppColors.skyBlue,
+                    blurRadius: 15,
+                    offset: Offset(0, 5))
+              ]),
+          child: Padding(
+            padding: const EdgeInsets.all(5.0),
+            child: Row(
+              children: [
+                Image.asset("assets/images/homeIcon/policy.png", width: 50),
+                const SizedBox(width: 10),
+                Text(
+                  "Privay Policy",
                   style: CustomTextStyle.semibold
                       .copyWith(color: AppColors.textTitleColor, fontSize: 17),
                 )

@@ -26,7 +26,6 @@ class _MissingScreenState extends State<MissingScreen> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     shuffledList = List<SequenceQuestion>.from(viewModel.sequenceQuestions)
       ..shuffle();

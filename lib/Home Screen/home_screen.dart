@@ -3,6 +3,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:kids_learning/Ads/InterstitialAdManager.dart';
 import 'package:kids_learning/Grid%20Screen/Alphabet/alphabetListScreen.dart';
 import 'package:kids_learning/Grid%20Screen/Animals/animalsListScreen.dart';
@@ -24,11 +25,13 @@ import 'package:kids_learning/Grid%20Screen/Vegetables/vegetableListScreen.dart'
 import 'package:kids_learning/Grid%20Screen/Vehicles/vehiclesListScreen.dart';
 import 'package:kids_learning/Home%20Screen/homeVM.dart';
 import 'package:kids_learning/Profile%20Screen/profile_screen.dart';
+import 'package:kids_learning/models/base_viewmodel.dart';
 import 'package:kids_learning/pageview/pageview_screen.dart';
 import 'package:kids_learning/widget/colors.dart';
 import 'package:kids_learning/widget/textStyle.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -207,6 +210,14 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
     });
   }
 
+  Future<void> launchPolicy() async {
+    final Uri _url = Uri.parse(
+        'https://sites.google.com/view/kids-learningprivacy-policy/home');
+    if (!await launchUrl(_url, mode: LaunchMode.externalApplication)) {
+      throw 'Could not launch $_url';
+    }
+  }
+
   @override
   void dispose() {
     _controller.dispose();
@@ -220,160 +231,262 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
         child: Consumer<HomeVM>(builder: (context, value, _) {
           return Scaffold(
             backgroundColor: AppColors.skyBlue.withOpacity(0.99),
-            body: SafeArea(
-              child: Container(
-                // height: MediaQuery.of(context).size.height,
-                decoration: BoxDecoration(
-                    // color: Colors.white,
-                    gradient: LinearGradient(
-                        begin: Alignment.topCenter,
-                        end: Alignment.bottomCenter,
-                        colors: [
-                      Colors.blue.shade200,
-                      Colors.white,
-                      Colors.blue.shade200
-                    ])),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const SizedBox(height: 10),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            body: Stack(
+              children: [
+                SafeArea(
+                  child: Container(
+                    // height: MediaQuery.of(context).size.height,
+                    decoration: BoxDecoration(
+                        // color: Colors.white,
+                        gradient: LinearGradient(
+                            begin: Alignment.topCenter,
+                            end: Alignment.bottomCenter,
+                            colors: [
+                          Colors.blue.shade200,
+                          Colors.white,
+                          Colors.blue.shade200
+                        ])),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Expanded(
-                          child: Row(
-                            children: [
-                              const SizedBox(width: 15),
-                              Padding(
-                                padding: const EdgeInsets.only(right: 15),
-                                child: Container(
-                                  width: 65,
-                                  height: 65,
-                                  decoration: const BoxDecoration(
-                                      color: AppColors.pink,
-                                      shape: BoxShape.circle),
-                                  child: imageBytes != null
-                                      ? CircleAvatar(
-                                          radius: 35,
-                                          backgroundImage:
-                                              MemoryImage(imageBytes!),
-                                        )
-                                      : Container(
-                                          height: 65,
-                                          width: 65,
-                                          decoration: const BoxDecoration(
-                                              shape: BoxShape.circle),
-                                          child: ClipRRect(
-                                            child: Image.asset(
-                                              "assets/images/homeIcon/profile_placeholder.png",
-                                              fit: BoxFit.fill,
-                                            ),
+                        const SizedBox(height: 10),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Expanded(
+                              child: Row(
+                                children: [
+                                  const SizedBox(width: 15),
+                                  Padding(
+                                    padding: const EdgeInsets.only(right: 15),
+                                    child: Container(
+                                      width: 65,
+                                      height: 65,
+                                      decoration: const BoxDecoration(
+                                          color: AppColors.pink,
+                                          shape: BoxShape.circle),
+                                      child: imageBytes != null
+                                          ? CircleAvatar(
+                                              radius: 35,
+                                              backgroundImage:
+                                                  MemoryImage(imageBytes!),
+                                            )
+                                          : Container(
+                                              height: 65,
+                                              width: 65,
+                                              decoration: const BoxDecoration(
+                                                  shape: BoxShape.circle),
+                                              child: ClipRRect(
+                                                child: Image.asset(
+                                                  "assets/images/homeIcon/profile_placeholder.png",
+                                                  fit: BoxFit.fill,
+                                                ),
+                                              )),
+                                    ),
+                                  ),
+                                  Expanded(
+                                    child: Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                            DateTime.now().hour < 12
+                                                ? "Good Morning !"
+                                                : DateTime.now().hour < 18
+                                                    ? "Good Afternoon !"
+                                                    : "Good Evening !",
+                                            style: CustomTextStyle.semibold
+                                                .copyWith(
+                                                    letterSpacing: 0.5,
+                                                    fontSize: 20,
+                                                    color: AppColors
+                                                        .textTitleColor)),
+                                        Text("Hi , ${userName ?? ""}",
+                                            overflow: TextOverflow.ellipsis,
+                                            maxLines: 1,
+                                            style: CustomTextStyle.semibold
+                                                .copyWith(
+                                                    letterSpacing: 0.5,
+                                                    fontSize: 18,
+                                                    color: AppColors.black)),
+                                        Text("Let's Start Learning",
+                                            style: CustomTextStyle.semibold
+                                                .copyWith(
+                                                    letterSpacing: 0.5,
+                                                    fontSize: 16,
+                                                    color: AppColors.black))
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            PopupMenuButton<String>(
+                                onSelected: (value) {
+                                  print('Selected: $value');
+                                },
+                                itemBuilder: (BuildContext context) => [
+                                      PopupMenuItem(
+                                          value: "Option 1",
+                                          onTap: () {
+                                            profileAction();
+                                          },
+                                          child: Text(
+                                            "Profile",
+                                            style: CustomTextStyle.medium
+                                                .copyWith(
+                                                    color: AppColors.black,
+                                                    fontSize: 15),
                                           )),
-                                ),
-                              ),
-                              Expanded(
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                        DateTime.now().hour < 12
-                                            ? 'Good Morning !'
-                                            : DateTime.now().hour < 18
-                                                ? 'Good Afternoon !'
-                                                : 'Good Evening !',
-                                        style: CustomTextStyle.semibold
-                                            .copyWith(
-                                                letterSpacing: 0.5,
-                                                fontSize: 20,
-                                                color:
-                                                    AppColors.textTitleColor)),
-                                    Text("Hi , ${userName ?? ""}",
-                                        overflow: TextOverflow.ellipsis,
-                                        maxLines: 1,
-                                        style: CustomTextStyle.semibold
-                                            .copyWith(
-                                                letterSpacing: 0.5,
-                                                fontSize: 18,
-                                                color: AppColors.black)),
-                                    Text("Let's Start Learning",
-                                        style: CustomTextStyle.semibold
-                                            .copyWith(
-                                                letterSpacing: 0.5,
-                                                fontSize: 16,
-                                                color: AppColors.black))
-                                  ],
-                                ),
-                              ),
-                            ],
+                                      PopupMenuItem(
+                                          value: "Option 2",
+                                          onTap: () {
+                                            launchPolicy();
+                                          },
+                                          child: Text(
+                                            "Privacy Policy",
+                                            style: CustomTextStyle.medium
+                                                .copyWith(
+                                                    color: AppColors.black,
+                                                    fontSize: 15),
+                                          )),
+                                      PopupMenuItem(
+                                          value: "Option 1",
+                                          onTap: () {
+                                            showAlert();
+                                          },
+                                          child: Text(
+                                            "Logout",
+                                            style: CustomTextStyle.medium
+                                                .copyWith(
+                                                    color: AppColors.black,
+                                                    fontSize: 15),
+                                          )),
+                                    ],
+                                offset: const Offset(0, 50),
+                                child: Padding(
+                                  padding:
+                                      const EdgeInsets.only(right: 7, top: 10),
+                                  child: Icon(Icons.more_vert, size: 30),
+                                )),
+                          ],
+                        ),
+                        const SizedBox(height: 10),
+                        Expanded(
+                          child: AnimationLimiter(
+                            child: GridView.builder(
+                              padding: EdgeInsets.only(
+                                  left: 20, right: 20, bottom: 25),
+                              gridDelegate:
+                                  SliverGridDelegateWithFixedCrossAxisCount(
+                                      crossAxisCount: 2,
+                                      mainAxisSpacing: 20,
+                                      crossAxisSpacing: 20,
+                                      childAspectRatio: 0.80),
+                              itemCount: viewModel.allGrid.length,
+                              itemBuilder: (context, index) {
+                                final item = viewModel.allGrid[index];
+                                // final animation = Tween(begin: 0.0, end: 1.0)
+                                //     .animate(CurvedAnimation(
+                                //         parent: _controller,
+                                //         curve: Interval(0.1 * index, 0.9,
+                                //             curve: Curves.easeInOut)));
+                                return InkWell(
+                                  onTap: () {
+                                    onTap(item.type);
+                                  },
+                                  child: AnimationConfiguration.staggeredGrid(
+                                    position: index,
+                                    duration: const Duration(milliseconds: 500),
+                                    columnCount: 2,
+                                    child: ScaleAnimation(
+                                      scale: 0.7,
+                                      child: FadeInAnimation(
+                                        child: Container(
+                                          decoration: BoxDecoration(
+                                              color: item.color,
+                                              borderRadius:
+                                                  BorderRadius.circular(25),
+                                              border: Border.all(
+                                                  width: 0.7,
+                                                  color: AppColors.black)),
+                                          child: Stack(
+                                            children: [
+                                              Container(
+                                                height: 150,
+                                                width: 150,
+                                                decoration: const BoxDecoration(
+                                                    color: Colors.white12,
+                                                    borderRadius:
+                                                        BorderRadius.only(
+                                                            topLeft: Radius
+                                                                .circular(25),
+                                                            bottomRight:
+                                                                Radius.circular(
+                                                                    150))),
+                                              ),
+                                              Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.center,
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.center,
+                                                children: [
+                                                  Padding(
+                                                    padding:
+                                                        const EdgeInsets.all(
+                                                            10.0),
+                                                    child: Image.asset(
+                                                      item.image,
+                                                      fit: BoxFit.fill,
+                                                      width: double.infinity,
+                                                      // height: 150,
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                              Align(
+                                                alignment:
+                                                    Alignment.bottomCenter,
+                                                child: Padding(
+                                                  padding:
+                                                      const EdgeInsets.only(
+                                                          bottom: 7),
+                                                  child: Text(
+                                                    item.name,
+                                                    textAlign: TextAlign.center,
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
+                                                    maxLines: 2,
+                                                    style: CustomTextStyle
+                                                        .semibold
+                                                        .copyWith(
+                                                            fontSize: 18,
+                                                            color: AppColors
+                                                                .black),
+                                                  ),
+                                                ),
+                                              )
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                );
+                              },
+                            ),
                           ),
                         ),
-                        PopupMenuButton<String>(
-                            onSelected: (value) {
-                              print('Selected: $value');
-                            },
-                            itemBuilder: (BuildContext context) => [
-                                  PopupMenuItem(
-                                      value: "Option 1",
-                                      onTap: () {
-                                        profileAction();
-                                      },
-                                      child: Text(
-                                        "Profile",
-                                        style: CustomTextStyle.medium.copyWith(
-                                            color: AppColors.black,
-                                            fontSize: 15),
-                                      )),
-                                  PopupMenuItem(
-                                      value: "Option 1",
-                                      onTap: () {
-                                        showAlert();
-                                      },
-                                      child: Text(
-                                        "Logout",
-                                        style: CustomTextStyle.medium.copyWith(
-                                            color: AppColors.black,
-                                            fontSize: 15),
-                                      )),
-                                ],
-                            offset: const Offset(0, 50),
-                            child: Padding(
-                              padding: const EdgeInsets.only(right: 7, top: 10),
-                              child: Icon(Icons.more_vert, size: 30),
-                            )),
                       ],
                     ),
-                    const SizedBox(height: 10),
-                    Expanded(
-                      child: Padding(
-                        padding: const EdgeInsets.only(left: 30, right: 30),
-                        child: GridView.builder(
-                          gridDelegate:
-                              const SliverGridDelegateWithFixedCrossAxisCount(
-                            childAspectRatio: 0.75,
-                            crossAxisCount: 2,
-                            mainAxisSpacing: 8,
-                            crossAxisSpacing: 30,
-                          ),
-                          itemCount: viewModel.allGrid.length,
-                          itemBuilder: (context, index) {
-                            final animation = Tween(begin: 0.0, end: 1.0)
-                                .animate(CurvedAnimation(
-                                    parent: _controller,
-                                    curve: Interval(0.1 * index, 0.9,
-                                        curve: Curves.easeInOut)));
-                            return ScaleTransition(
-                                scale: animation,
-                                child: gridItem(viewModel.allGrid[index]));
-                          },
-                        ),
-                      ),
-                    ),
-                  ],
+                  ),
                 ),
-              ),
+                value.loading ? LoaderView() : Container()
+              ],
             ),
           );
         }));

@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:kids_learning/FormScreen/form_screen.dart';
 import 'package:kids_learning/TabbarScreen/tab_bar_screen.dart';
 import 'package:kids_learning/pageview/pageview_screen.dart';
+import 'package:kids_learning/widget/colors.dart';
+import 'package:kids_learning/widget/textStyle.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -86,12 +88,12 @@ class _SplashScreenState extends State<SplashScreen> {
                   decoration: const BoxDecoration(color: Colors.transparent),
                   child: Image.asset("assets/app_splash.png", width: 320)),
               const SizedBox(height: 15),
-              // Text("Kid's Learning...",
-              //     style: CustomTextStyle.bold.copyWith(
-              //         letterSpacing: 1.5,
-              //         fontSize: 32,
-              //         color: AppColors.black)),
-              // const SizedBox(height: 15),
+              Text("Kid's Learning...",
+                  style: CustomTextStyle.bold.copyWith(
+                      letterSpacing: 1.5,
+                      fontSize: 32,
+                      color: AppColors.black)),
+              const SizedBox(height: 15),
             ],
           ),
         ),
