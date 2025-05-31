@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_tts/flutter_tts.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:kids_learning/Ads/InterstitialAdManager.dart';
 import 'package:kids_learning/Ads/bannerAdsManager.dart';
 import 'package:kids_learning/Listen%20And%20Guess/Count%20and%20Guess/count_vm.dart';
@@ -37,6 +36,7 @@ class _CountScreenState extends State<CountScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: AppColors.skyBlue.withOpacity(0.99),
       body: Stack(
         children: [
           Container(

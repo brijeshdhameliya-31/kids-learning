@@ -47,6 +47,7 @@ class _NumberListScreenState extends State<NumberListScreen>
         create: (BuildContext context) => viewModel,
         child: Consumer<NumberVM>(builder: (context, value, _) {
           return Scaffold(
+            backgroundColor: AppColors.skyBlue.withOpacity(0.99),
             body: Stack(
               children: [
                 Container(

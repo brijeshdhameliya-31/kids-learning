@@ -48,6 +48,7 @@ class _AlphabetScreenState extends State<AlphabetScreen> {
       controller.jumpToPage(widget.selectedIndex);
     }
     return Scaffold(
+      backgroundColor: AppColors.skyBlue.withOpacity(0.99),
       body: ChangeNotifierProvider<AlphabetVM>(
           create: (BuildContext context) => viewModel,
           child: Consumer<AlphabetVM>(builder: (context, value, _) {

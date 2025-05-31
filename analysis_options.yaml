@@ -10,7 +10,7 @@
 analyzer:
   errors:
     non_constant_identifier_names: ignore ignore
-    must_be_immutable: ignore ignore ignore ignore
+    must_be_immutable: ignore ignore ignore ignore ignore
     no_leading_underscores_for_local_identifiers: ignore
 include: package:flutter_lints/flutter.yaml
 

@@ -41,6 +41,7 @@ class _AlpabetsListenScreenState extends State<AlpabetsListenScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: AppColors.skyBlue.withOpacity(0.99),
       body: Stack(
         children: [
           Container(

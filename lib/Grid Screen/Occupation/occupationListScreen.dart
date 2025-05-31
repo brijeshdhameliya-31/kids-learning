@@ -46,6 +46,7 @@ class _OccupationListScreenState extends State<OccupationListScreen>
         create: (BuildContext context) => viewModel,
         child: Consumer<OccupationVM>(builder: (context, value, _) {
           return Scaffold(
+            backgroundColor: AppColors.skyBlue.withOpacity(0.99),
             body: Stack(
               children: [
                 Container(

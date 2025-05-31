@@ -35,6 +35,7 @@ class _MissingScreenState extends State<MissingScreen> {
   Widget build(BuildContext context) {
     PageController _controller = PageController(initialPage: 0);
     return Scaffold(
+      backgroundColor: AppColors.skyBlue.withOpacity(0.99),
       body: Stack(
         children: [
           Container(

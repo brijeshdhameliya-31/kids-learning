@@ -48,6 +48,7 @@ class _VegetableListScreenState extends State<VegetableListScreen>
         create: (BuildContext context) => viewModel,
         child: Consumer<VegetableVM>(builder: (context, value, _) {
           return Scaffold(
+            backgroundColor: AppColors.skyBlue.withOpacity(0.99),
             body: Stack(
               children: [
                 Container(

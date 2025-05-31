@@ -47,6 +47,7 @@ class _ShapeListScreenState extends State<ShapeListScreen>
         create: (BuildContext context) => viewModel,
         child: Consumer<ShapeVM>(builder: (context, value, _) {
           return Scaffold(
+            backgroundColor: AppColors.skyBlue.withOpacity(0.99),
             body: Stack(
               children: [
                 Container(

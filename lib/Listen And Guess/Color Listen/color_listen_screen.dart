@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_tts/flutter_tts.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:kids_learning/Ads/InterstitialAdManager.dart';
 import 'package:kids_learning/Ads/bannerAdsManager.dart';
 import 'package:kids_learning/Listen%20And%20Guess/Color%20Listen/colorsVM.dart';
@@ -41,6 +40,7 @@ class _ColorListenScreenState extends State<ColorListenScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: AppColors.skyBlue.withOpacity(0.99),
       body: Stack(
         children: [
           Container(

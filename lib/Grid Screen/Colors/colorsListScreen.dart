@@ -47,6 +47,7 @@ class _ColorListScreenState extends State<ColorListScreen>
         create: (BuildContext context) => viewModel,
         child: Consumer<ColorVM>(builder: (context, value, _) {
           return Scaffold(
+            backgroundColor: AppColors.skyBlue.withOpacity(0.99),
             body: Stack(
               children: [
                 Container(

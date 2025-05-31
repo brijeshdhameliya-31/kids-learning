@@ -1,8 +1,9 @@
+// ignore_for_file: must_be_immutable
+
 import 'package:flutter/material.dart';
 import 'package:flutter_tts/flutter_tts.dart';
 import 'package:kids_learning/Ads/InterstitialAdManager.dart';
 import 'package:kids_learning/Ads/bannerAdsManager.dart';
-import 'package:kids_learning/Grid%20Screen/AqauticAnimal/aquaticAnimalModel.dart';
 import 'package:kids_learning/Grid%20Screen/AqauticAnimal/aquaticAnimal_VM.dart';
 import 'package:kids_learning/models/base_viewmodel.dart';
 import 'package:kids_learning/widget/colors.dart';
@@ -52,6 +53,7 @@ class _AquaticAnimalScreenState extends State<AquaticAnimalScreen> {
         create: (BuildContext context) => viewModel,
         child: Consumer<AquaticAnimalVM>(builder: (context, value, _) {
           return Scaffold(
+            backgroundColor: AppColors.skyBlue.withOpacity(0.99),
             body: Stack(
               children: [
                 Container(

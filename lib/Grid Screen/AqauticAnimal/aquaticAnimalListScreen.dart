@@ -47,6 +47,7 @@ class _AquaticAnimalListScreenState extends State<AquaticAnimalListScreen>
         create: (BuildContext context) => viewModel,
         child: Consumer<AquaticAnimalVM>(builder: (context, value, _) {
           return Scaffold(
+            backgroundColor: AppColors.skyBlue.withOpacity(0.99),
             body: Stack(
               children: [
                 Container(

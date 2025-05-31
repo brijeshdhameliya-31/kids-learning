@@ -9,6 +9,7 @@ import 'package:kids_learning/widget/image.dart';
 import 'package:kids_learning/widget/textStyle.dart';
 import 'package:provider/provider.dart';
 
+// ignore: must_be_immutable
 class BirdsScreen extends StatefulWidget {
   int selectedIndex;
   BirdsScreen(this.selectedIndex, {super.key});
@@ -51,6 +52,7 @@ class _BirdsScreenState extends State<BirdsScreen> {
         create: (BuildContext context) => viewModel,
         child: Consumer<BirdsVM>(builder: (context, value, _) {
           return Scaffold(
+            backgroundColor: AppColors.skyBlue.withOpacity(0.99),
             body: Stack(
               children: [
                 Container(

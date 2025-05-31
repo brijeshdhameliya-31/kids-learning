@@ -31,6 +31,7 @@ class _FormScreenState extends State<FormScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: AppColors.skyBlue.withOpacity(0.99),
       body: SafeArea(
           child: Container(
         decoration: BoxDecoration(

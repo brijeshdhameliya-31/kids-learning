@@ -46,6 +46,7 @@ class _AnimalsListScreenState extends State<AnimalsListScreen>
         create: (BuildContext context) => viewModel,
         child: Consumer<AnimalsVM>(builder: (context, value, _) {
           return Scaffold(
+            backgroundColor: AppColors.skyBlue.withOpacity(0.99),
             body: Stack(
               children: [
                 Container(

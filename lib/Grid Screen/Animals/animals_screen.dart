@@ -1,3 +1,5 @@
+// ignore_for_file: must_be_immutable
+
 import 'package:flutter/material.dart';
 import 'package:flutter_tts/flutter_tts.dart';
 import 'package:kids_learning/Ads/bannerAdsManager.dart';
@@ -52,6 +54,7 @@ class _AnimalsScreenState extends State<AnimalsScreen> {
         create: (BuildContext context) => viewModel,
         child: Consumer<AnimalsVM>(builder: (context, value, _) {
           return Scaffold(
+            backgroundColor: AppColors.skyBlue.withOpacity(0.99),
             body: Stack(
               children: [
                 Container(

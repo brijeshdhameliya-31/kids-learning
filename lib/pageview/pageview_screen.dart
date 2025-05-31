@@ -72,6 +72,7 @@ class _PageViewScreenState extends State<PageViewScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: AppColors.skyBlue.withOpacity(0.99),
         body: SafeArea(
       child: Stack(
         children: [

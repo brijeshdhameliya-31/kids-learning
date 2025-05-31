@@ -9,6 +9,7 @@ import 'package:kids_learning/widget/image.dart';
 import 'package:kids_learning/widget/textStyle.dart';
 import 'package:provider/provider.dart';
 
+// ignore: must_be_immutable
 class ShapeScreen extends StatefulWidget {
   int selectedIndex;
   ShapeScreen(this.selectedIndex, {super.key});
@@ -51,6 +52,7 @@ class _ShapeScreenState extends State<ShapeScreen> {
         create: (BuildContext context) => viewModel,
         child: Consumer<ShapeVM>(builder: (context, value, _) {
           return Scaffold(
+            backgroundColor: AppColors.skyBlue.withOpacity(0.99),
             body: Stack(
               children: [
                 Container(

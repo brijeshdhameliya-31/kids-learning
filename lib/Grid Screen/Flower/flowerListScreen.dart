@@ -46,6 +46,7 @@ class _FlowerListScreenState extends State<FlowerListScreen>
         create: (BuildContext context) => viewModel,
         child: Consumer<FlowerVM>(builder: (context, value, _) {
           return Scaffold(
+            backgroundColor: AppColors.skyBlue.withOpacity(0.99),
             body: Stack(
               children: [
                 Container(

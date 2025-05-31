@@ -79,11 +79,6 @@ class HomeVM extends BaseVM {
         image: Images.vehicles,
         color: AppColors.pink.withOpacity(0.3),
         type: HomeGridType.vehicles),
-    // HomeModel(
-    //     name: "Body Parts",
-    //     image: Images.bodyParts,
-    //     color: AppColors.fenta.withOpacity(0.3),
-    //     type: HomeGridType.bodyParts),
     HomeModel(
         name: "Kitchen Utensil",
         image: Images.kitchenSet,
@@ -104,29 +99,34 @@ class HomeVM extends BaseVM {
         image: Images.furniture,
         color: Colors.indigo.withOpacity(0.2),
         type: HomeGridType.furnitures),
-    // HomeModel(
-    //     name: "Months",
-    //     image: Images.months,
-    //     color: Colors.blue.withOpacity(0.3),
-    //     type: HomeGridType.months),
-    // HomeModel(
-    //     name: "Days",
-    //     image: Images.days,
-    //     color: Colors.purpleAccent.withOpacity(0.3),
-    //     type: HomeGridType.days),
-    // HomeModel(
-    //     name: "Seasons",
-    //     image: Images.seasons,
-    //     color: Colors.greenAccent.withOpacity(0.4),
-    //     type: HomeGridType.seasons),
-    // HomeModel(
-    //     name: "Directions",
-    //     image: Images.directions,
-    //     color: Colors.limeAccent.withOpacity(0.4),
-    //     type: HomeGridType.direction),
   ];
 }
 
+// HomeModel(
+//     name: "Body Parts",
+//     image: Images.bodyParts,
+//     color: AppColors.fenta.withOpacity(0.3),
+//     type: HomeGridType.bodyParts),
+// HomeModel(
+//     name: "Months",
+//     image: Images.months,
+//     color: Colors.blue.withOpacity(0.3),
+//     type: HomeGridType.months),
+// HomeModel(
+//     name: "Days",
+//     image: Images.days,
+//     color: Colors.purpleAccent.withOpacity(0.3),
+//     type: HomeGridType.days),
+// HomeModel(
+//     name: "Seasons",
+//     image: Images.seasons,
+//     color: Colors.greenAccent.withOpacity(0.4),
+//     type: HomeGridType.seasons),
+// HomeModel(
+//     name: "Directions",
+//     image: Images.directions,
+//     color: Colors.limeAccent.withOpacity(0.4),
+//     type: HomeGridType.direction),
 class HomeModel {
   String name;
   String image;
