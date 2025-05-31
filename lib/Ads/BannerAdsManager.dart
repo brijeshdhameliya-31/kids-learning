@@ -17,7 +17,7 @@ class _BannerAdWidgetState extends State<BannerAdWidget> {
   void _loadBannerAd() {
     _bannerAd = BannerAd(
       adUnitId: Platform.isAndroid
-          ? "ca-app-pub-3940256099942544/6300978111"
+          ? "ca-app-pub-4711304367802880/6782973103"
           : "ca-app-pub-3940256099942544/6300978111", // Test Ad Unit ID
       size: AdSize.banner,
       request: const AdRequest(),

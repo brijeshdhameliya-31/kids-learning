@@ -19,7 +19,7 @@ class InterstitialAdManager {
   void loadInterstitialAd() {
     InterstitialAd.load(
       adUnitId: Platform.isAndroid
-          ? "ca-app-pub-3940256099942544/1033173712"
+          ? "ca-app-pub-4711304367802880/1341583353"
           : "ca-app-pub-3940256099942544/1033173712",// Test Ad Unit ID
       request: const AdRequest(),
       adLoadCallback: InterstitialAdLoadCallback(
