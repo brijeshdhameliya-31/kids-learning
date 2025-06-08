@@ -35,7 +35,7 @@ class _MissingScreenState extends State<MissingScreen> {
   Widget build(BuildContext context) {
     PageController _controller = PageController(initialPage: 0);
     return Scaffold(
-      backgroundColor: AppColors.skyBlue.withOpacity(0.99),
+      // backgroundColor: AppColors.skyBlue.withOpacity(0.99),
       body: Stack(
         children: [
           Container(
@@ -55,136 +55,134 @@ class _MissingScreenState extends State<MissingScreen> {
             alignment: Alignment.bottomCenter,
             child: Image.asset(Images.background),
           ),
-          Expanded(
-            child: Column(
-              children: [
-                const SizedBox(height: 25),
-                SafeArea(
-                  child: Text(
-                    "Fill in the blank",
-                    style: CustomTextStyle.bold.copyWith(
-                      fontSize: 25,
-                      color: Colors.indigo.shade700,
-                    ),
+          Column(
+            children: [
+              const SizedBox(height: 25),
+              SafeArea(
+                child: Text(
+                  "Fill in the blank",
+                  style: CustomTextStyle.bold.copyWith(
+                    fontSize: 25,
+                    color: Colors.indigo.shade700,
                   ),
                 ),
-                const SizedBox(height: 20),
-                Flexible(
-                  child: PageView.builder(
-                      controller: _controller,
-                      physics: const NeverScrollableScrollPhysics(),
-                      itemCount: shuffledList.length,
-                      itemBuilder: (context, index) {
-                        final question =
-                            shuffledList[currentIndex];
-                        return Column(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Text(
-                              _formatSequence(question),
-                              style: const TextStyle(
-                                  fontSize: 36, fontWeight: FontWeight.bold),
-                            ),
-                            const SizedBox(height: 40),
-                            GridView.count(
-                              crossAxisCount: 2,
-                              shrinkWrap: true,
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 50),
-                              mainAxisSpacing: 20,
-                              crossAxisSpacing: 20,
-                              children: question.options.map((option) {
-                                final isCorrect =
-                                    option == question.correctAnswer;
-                                final isSelected = selectedAnswer == option;
-
-                                return GestureDetector(
-                                  onTap: isAnswered
-                                      ? null
-                                      : () async {
-                                          setState(() {
-                                            selectedAnswer = option;
-                                            isAnswered = true;
-                                          });
-
-                                          if (isCorrect) {
-                                            score++;
-                                            await flutterTts.speak("Correct");
-                                          } else {
-                                            await flutterTts.speak("Incorrect");
-                                          }
-                                        },
-                                  child: Container(
-                                    decoration: BoxDecoration(
-                                      shape: BoxShape.circle,
-                                      color: isAnswered
-                                          ? isCorrect
-                                              ? Colors.green.shade200
-                                              : isSelected
-                                                  ? Colors.red.shade200
-                                                  : Colors.grey.shade200
-                                          : Colors.grey.shade100,
-                                      border: Border.all(
-                                          width: 5,
-                                          color: isAnswered
-                                              ? isCorrect
-                                                  ? Colors.green
-                                                  : Colors.red
-                                              : Colors.transparent),
-                                    ),
-                                    padding: const EdgeInsets.all(10),
-                                    child: Center(
-                                        child: Text(
-                                      "${option}",
-                                      style: TextStyle(fontSize: 25),
-                                    )),
+              ),
+              const SizedBox(height: 20),
+              Flexible(
+                child: PageView.builder(
+                    controller: _controller,
+                    physics: const NeverScrollableScrollPhysics(),
+                    itemCount: shuffledList.length,
+                    itemBuilder: (context, index) {
+                      final question =
+                          shuffledList[currentIndex];
+                      return Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Text(
+                            _formatSequence(question),
+                            style: const TextStyle(
+                                fontSize: 36, fontWeight: FontWeight.bold),
+                          ),
+                          const SizedBox(height: 40),
+                          GridView.count(
+                            crossAxisCount: 2,
+                            shrinkWrap: true,
+                            padding:
+                                const EdgeInsets.symmetric(horizontal: 50),
+                            mainAxisSpacing: 20,
+                            crossAxisSpacing: 20,
+                            children: question.options.map((option) {
+                              final isCorrect =
+                                  option == question.correctAnswer;
+                              final isSelected = selectedAnswer == option;
+          
+                              return GestureDetector(
+                                onTap: isAnswered
+                                    ? null
+                                    : () async {
+                                        setState(() {
+                                          selectedAnswer = option;
+                                          isAnswered = true;
+                                        });
+          
+                                        if (isCorrect) {
+                                          score++;
+                                          await flutterTts.speak("Correct");
+                                        } else {
+                                          await flutterTts.speak("Incorrect");
+                                        }
+                                      },
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    color: isAnswered
+                                        ? isCorrect
+                                            ? Colors.green.shade200
+                                            : isSelected
+                                                ? Colors.red.shade200
+                                                : Colors.grey.shade200
+                                        : Colors.grey.shade100,
+                                    border: Border.all(
+                                        width: 5,
+                                        color: isAnswered
+                                            ? isCorrect
+                                                ? Colors.green
+                                                : Colors.red
+                                            : Colors.transparent),
                                   ),
-                                );
-                              }).toList(),
-                            ),
-                            const SizedBox(height: 30),
-                            if (isAnswered)
-                              GestureDetector(
-                                onTap: () {
-                                  if (!isAnswered)
-                                    return; // Prevent skipping without answering
-
-                                  void goToNextQuestion() {
-                                    if (currentIndex + 1 <
-                                        shuffledList.length) {
-                                      setState(() {
-                                        currentIndex++;
-                                        isAnswered = false;
-                                        selectedAnswer = null;
-                                      });
-                                    } else {
-                                      Navigator.pushReplacement(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (context) =>
-                                              ResultScreen(score),
-                                        ),
-                                      );
-                                    }
-                                  }
-
-                                  // Show ad every 5th question (after 5, 10, 15...)
-                                  if ((currentIndex + 1) % 5 == 0) {
-                                    InterstitialAdManager.shared
-                                        .showAdAndThen(goToNextQuestion);
+                                  padding: const EdgeInsets.all(10),
+                                  child: Center(
+                                      child: Text(
+                                    "${option}",
+                                    style: TextStyle(fontSize: 25),
+                                  )),
+                                ),
+                              );
+                            }).toList(),
+                          ),
+                          const SizedBox(height: 30),
+                          if (isAnswered)
+                            GestureDetector(
+                              onTap: () {
+                                if (!isAnswered)
+                                  return; // Prevent skipping without answering
+          
+                                void goToNextQuestion() {
+                                  if (currentIndex + 1 <
+                                      shuffledList.length) {
+                                    setState(() {
+                                      currentIndex++;
+                                      isAnswered = false;
+                                      selectedAnswer = null;
+                                    });
                                   } else {
-                                    goToNextQuestion();
+                                    Navigator.pushReplacement(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) =>
+                                            ResultScreen(score),
+                                      ),
+                                    );
                                   }
-                                },
-                                child:
-                                    Image.asset(Images.rightArrow, width: 70),
-                              ),
-                          ],
-                        );
-                      }),
-                )
-              ],
-            ),
+                                }
+          
+                                // Show ad every 5th question (after 5, 10, 15...)
+                                if ((currentIndex + 1) % 5 == 0) {
+                                  InterstitialAdManager.shared
+                                      .showAdAndThen(goToNextQuestion);
+                                } else {
+                                  goToNextQuestion();
+                                }
+                              },
+                              child:
+                                  Image.asset(Images.rightArrow, width: 70),
+                            ),
+                        ],
+                      );
+                    }),
+              )
+            ],
           ),
           Padding(
             padding: const EdgeInsets.all(8.0),
