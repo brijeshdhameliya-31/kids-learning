@@ -7,6 +7,7 @@ import 'package:google_mobile_ads/google_mobile_ads.dart';
 
 // App Id : ca-app-pub-4711304367802880~4430781121
 // InterstitialAd Id : ca-app-pub-4711304367802880/1341583353
+// new ca-app-pub-4711304367802880/6556434329
 class InterstitialAdManager {
   static InterstitialAdManager shared = InterstitialAdManager._in();
   InterstitialAd? _interstitialAd;
@@ -19,14 +20,15 @@ class InterstitialAdManager {
   void loadInterstitialAd() {
     InterstitialAd.load(
       adUnitId: Platform.isAndroid
-          ? "ca-app-pub-4711304367802880/1341583353"
+          ? "ca-app-pub-4711304367802880/6556434329" //
+          // "ca-app-pub-4711304367802880/1341583353"
           : "ca-app-pub-3940256099942544/1033173712",// Test Ad Unit ID
       request: const AdRequest(),
       adLoadCallback: InterstitialAdLoadCallback(
         onAdLoaded: (ad) {
           _interstitialAd = ad;
           isAdLoaded = true;
-          print("Ads Loaded...");
+          print("Interstitial Ads Loaded... ${ad.adUnitId}");
         },
         onAdFailedToLoad: (error) {
           print('Failed to load interstitial ad: $error');

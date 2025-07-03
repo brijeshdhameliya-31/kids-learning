@@ -94,7 +94,7 @@ class _ResultScreenState extends State<ResultScreen> {
                 const SizedBox(height: 20),
                 InkWell(
                   onTap: () {
-                    Navigator.of(context)..pop()..pop();
+                    Navigator.of(context).pop();
                   },
                   child: Container(
                     decoration: BoxDecoration(

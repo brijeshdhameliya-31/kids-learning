@@ -9,7 +9,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   MobileAds.instance.initialize();
   await Firebase.initializeApp();
-  InterstitialAdManager.shared.loadInterstitialAd();
+  InterstitialAdManager.shared.loadInterstitialAd();  
   runApp(const MyApp());
 }
 

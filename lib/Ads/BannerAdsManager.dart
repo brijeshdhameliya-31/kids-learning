@@ -13,11 +13,12 @@ class BannerAdWidget extends StatefulWidget {
 class _BannerAdWidgetState extends State<BannerAdWidget> {
   BannerAd? _bannerAd;
   bool _isAdLoaded = false;
-//ca-app-pub-4711304367802880/6782973103
+// old ca-app-pub-4711304367802880/6782973103
+// new ca-app-pub-4711304367802880/4313414361
   void _loadBannerAd() {
     _bannerAd = BannerAd(
       adUnitId: Platform.isAndroid
-          ? "ca-app-pub-4711304367802880/6782973103"
+          ? "ca-app-pub-4711304367802880/4313414361"
           : "ca-app-pub-3940256099942544/6300978111", // Test Ad Unit ID
       size: AdSize.banner,
       request: const AdRequest(),
@@ -25,10 +26,11 @@ class _BannerAdWidgetState extends State<BannerAdWidget> {
           onAdLoaded: (Ad ad) {
             setState(() {
               _isAdLoaded = true;
+              print("Ad Unit Banner Id : ${ad.adUnitId}");
             });
           },
           onAdFailedToLoad: (Ad ad, LoadAdError error) {
-            print('Ad failed to load: $error');
+            print('Ad failed Banner to load: $error');
             ad.dispose();
           },
           onAdClicked: (ad) {}),
